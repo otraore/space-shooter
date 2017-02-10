@@ -6,6 +6,7 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+	"github.com/davecgh/go-spew/spew"
 )
 
 type Label struct {
@@ -48,31 +49,33 @@ type Button struct {
 	Graphic      Graphic
 	Image        *common.Texture
 	ImageClicked *common.Texture
-
-	OnClick     func(*Button)
-	OnMouseOver func(*Button)
-	OnMouseOut  func(*Button)
+	Position     engo.Point
+	World        *ecs.World
+	Text         string
+	Font         *common.Font
+	OnClick      func(*Button)
+	OnMouseOver  func(*Button)
+	OnMouseOut   func(*Button)
 }
 
-func NewButton(w *ecs.World, bg *common.Texture, bgClicked *common.Texture, f *common.Font, label string) *Button {
-	b := new(Button)
+func (b *Button) Init() error {
 	b.Label.BasicEntity = ecs.NewBasic()
 	b.Graphic.BasicEntity = ecs.NewBasic()
-	b.Image = bg
-	b.ImageClicked = bgClicked
 
 	b.Graphic.MouseComponent = common.MouseComponent{}
 
 	b.Graphic.RenderComponent = common.RenderComponent{
-		Drawable: bg,
-		Scale:    engo.Point{1, 1},
+		Drawable: b.Image,
+		Scale:    engo.Point{1, 1}, //Todo: make this editable
 	}
 
-	width, height, _ := f.TextDimensions(label)
+	spew.Dump(b.Text)
+
+	width, height, _ := b.Font.TextDimensions(b.Text)
 	b.Graphic.SpaceComponent = common.SpaceComponent{
 		Position: engo.Point{0, 0},
-		Width:    bg.Width(),
-		Height:   bg.Height(),
+		Width:    b.Image.Width(),
+		Height:   b.Image.Height(),
 	}
 
 	b.Label.SpaceComponent = common.SpaceComponent{
@@ -87,16 +90,16 @@ func NewButton(w *ecs.World, bg *common.Texture, bgClicked *common.Texture, f *c
 	b.Label.SpaceComponent.Position.Y = b.Graphic.SpaceComponent.Position.Y + float32(height)
 
 	b.Label.RenderComponent.Drawable = common.Text{
-		Font: f,
-		Text: label,
+		Font: b.Font,
+		Text: b.Text,
 	}
 
 	b.Label.SetShader(common.TextHUDShader)
-	w.AddSystem(&common.MouseSystem{})
-	w.AddSystem(&ButtonSystem{})
+	b.World.AddSystem(&common.MouseSystem{})
+	b.World.AddSystem(&ButtonSystem{})
 
 	fmt.Println(b.Label.SpaceComponent.Width)
-	for _, system := range w.Systems() {
+	for _, system := range b.World.Systems() {
 		switch sys := system.(type) {
 		case *common.MouseSystem:
 			sys.Add(&b.Graphic.BasicEntity, &b.Graphic.MouseComponent, &b.Graphic.SpaceComponent, &b.Graphic.RenderComponent)
@@ -104,7 +107,8 @@ func NewButton(w *ecs.World, bg *common.Texture, bgClicked *common.Texture, f *c
 			sys.Add(b)
 		}
 	}
-	return b
+
+	return nil
 }
 
 type buttonEntity struct {

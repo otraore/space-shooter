@@ -48,6 +48,8 @@ func (GameScene) Setup(w *ecs.World) {
 	w.AddSystem(&RockSpawnSystem{})
 	w.AddSystem(&GuySystem{})
 
+	engo.Input.RegisterButton("quit", engo.Q, engo.Escape)
+
 	texture, err := common.LoadedSprite("images/icon.png")
 	if err != nil {
 		log.Println(err)
@@ -141,6 +143,9 @@ func (c *ControlSystem) Update(dt float32) {
 		e.SpaceComponent.Position.Y += speed * vert.Value()
 	}
 
+	if btn := engo.Input.Button("quit"); btn.JustPressed() {
+		engo.SetScene(MenuScene{}, false)
+	}
 }
 
 type RockSpawnSystem struct {

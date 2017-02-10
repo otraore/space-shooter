@@ -13,11 +13,11 @@ var playBtn *Button
 
 type MenuScene struct{}
 
-func (*MenuScene) Preload() {
+func (MenuScene) Preload() {
 	engo.Files.Load("images/button_silver.png", "images/button_gold.png", "fonts/kenvector_future.ttf")
 }
 
-func (*MenuScene) Setup(w *ecs.World) {
+func (MenuScene) Setup(w *ecs.World) {
 	common.SetBackground(color.White)
 
 	w.AddSystem(&common.RenderSystem{})
@@ -43,7 +43,19 @@ func (*MenuScene) Setup(w *ecs.World) {
 		log.Println(err)
 	}
 
-	playBtn = NewButton(w, texture, textureClicked, fnt, "Play")
+	x := (engo.GameWidth() / 2.0) - texture.Width()/float32(2.0)
+	y := (engo.GameHeight() / 2.0) - texture.Height()/float32(2.0)
+
+	playBtn = &Button{
+		Text:         "Play",
+		World:        w,
+		Image:        texture,
+		ImageClicked: textureClicked,
+		Font:         fnt,
+		Position:     engo.Point{x, y},
+	}
+
+	playBtn.Init()
 
 	for _, system := range w.Systems() {
 		switch sys := system.(type) {
@@ -57,4 +69,4 @@ func (*MenuScene) Setup(w *ecs.World) {
 
 }
 
-func (*MenuScene) Type() string { return "MenuScene" }
+func (MenuScene) Type() string { return "MenuScene" }
