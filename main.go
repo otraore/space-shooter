@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import "engo.io/engo"
+
+var guy Guy
+var playing = true
 
 func main() {
-	fmt.Println("Hello World")
+	opts := engo.RunOptions{
+		Title:          "Dodger",
+		Width:          1024,
+		Height:         640,
+		StandardInputs: true,
+	}
+
+	engo.Run(opts, &MenuScene{})
 }
