@@ -14,6 +14,9 @@ import (
 	"github.com/otraore/go-dodger/gui"
 )
 
+var guy Guy
+var playing = true
+
 type Guy struct {
 	ecs.BasicEntity
 	common.CollisionComponent
