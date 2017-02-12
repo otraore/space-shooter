@@ -1,23 +1,29 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 	"log"
 
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+	"github.com/otraore/go-dodger/gui"
 )
 
-var playBtn *Button
+var playBtn *gui.Button
 
 type MenuScene struct{}
 
 func (MenuScene) Preload() {
-	engo.Files.Load("images/button_silver.png", "images/button_gold.png", "fonts/kenvector_future.ttf")
+	err := engo.Files.Load("images/button_silver.png", "images/button_gold.png", "fonts/kenvector_future.ttf")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (MenuScene) Setup(w *ecs.World) {
+
 	common.SetBackground(color.White)
 
 	w.AddSystem(&common.RenderSystem{})
@@ -27,6 +33,7 @@ func (MenuScene) Setup(w *ecs.World) {
 		FG:   color.White,
 		Size: 64,
 	}
+
 	err := fnt.CreatePreloaded()
 	if err != nil {
 		panic(err)
@@ -43,10 +50,12 @@ func (MenuScene) Setup(w *ecs.World) {
 		log.Println(err)
 	}
 
-	x := (engo.GameWidth() / 2.0) - texture.Width()/float32(2.0)
-	y := (engo.GameHeight() / 2.0) - texture.Height()/float32(2.0)
+	x := (engo.GameWidth() / 2) - texture.Width()/2
+	y := (engo.GameHeight() / 2) - (texture.Height() / 2) - texture.Height()/2
 
-	playBtn = &Button{
+	fmt.Println(texture.Width())
+
+	playBtn = &gui.Button{
 		Text:         "Play",
 		World:        w,
 		Image:        texture,
@@ -57,15 +66,25 @@ func (MenuScene) Setup(w *ecs.World) {
 
 	playBtn.Init()
 
-	for _, system := range w.Systems() {
-		switch sys := system.(type) {
-		case *common.RenderSystem:
-			sys.Add(&playBtn.Graphic.BasicEntity, &playBtn.Graphic.RenderComponent, &playBtn.Graphic.SpaceComponent)
-			sys.Add(&playBtn.Label.BasicEntity, &playBtn.Label.RenderComponent, &playBtn.Label.SpaceComponent)
-		}
-	}
+	playBtn.OnClick(func() {
+		engo.SetScene(GameScene{}, true)
+	})
 
-	// Create an entity
+	y += texture.Height() + 30
+
+	exitBtn := &gui.Button{
+		Text:         "Exit",
+		World:        w,
+		Image:        texture,
+		ImageClicked: textureClicked,
+		Font:         fnt,
+		Position:     engo.Point{x, y},
+	}
+	exitBtn.Init()
+
+	exitBtn.OnClick(func() {
+		engo.Exit()
+	})
 
 }
 

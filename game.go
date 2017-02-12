@@ -11,6 +11,7 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+	"github.com/otraore/go-dodger/gui"
 )
 
 type Guy struct {
@@ -30,14 +31,18 @@ type Rock struct {
 type GameScene struct{}
 
 func (GameScene) Preload() {
-	err := engo.Files.Load("images/icon.png", "images/rock.png")
+	err := engo.Files.Load("images/ui/playerLife3_red.png", "images/playerShip3_red.png", "images/rock.png", "fonts/kenvector_future.ttf")
 	if err != nil {
 		log.Println(err)
 	}
+
+	fmt.Println("Game Scene Preload")
 }
 
 func (GameScene) Setup(w *ecs.World) {
-	common.SetBackground(color.White)
+	fmt.Println("Game Scene Setup")
+
+	common.SetBackground(color.Black)
 
 	// Add all of the systems
 	w.AddSystem(&common.RenderSystem{})
@@ -50,7 +55,7 @@ func (GameScene) Setup(w *ecs.World) {
 
 	engo.Input.RegisterButton("quit", engo.Q, engo.Escape)
 
-	texture, err := common.LoadedSprite("images/icon.png")
+	texture, err := common.LoadedSprite("images/playerShip3_red.png")
 	if err != nil {
 		log.Println(err)
 	}
@@ -61,7 +66,7 @@ func (GameScene) Setup(w *ecs.World) {
 	// Initialize the components, set scale to 4x
 	guy.RenderComponent = common.RenderComponent{
 		Drawable: texture,
-		Scale:    engo.Point{4, 4},
+		Scale:    engo.Point{1, 1},
 	}
 
 	fmt.Println(engo.GameWidth())
@@ -77,6 +82,54 @@ func (GameScene) Setup(w *ecs.World) {
 		Main:  true,
 	}
 
+	fnt := &common.Font{
+		URL:  "fonts/kenvector_future.ttf",
+		FG:   color.White,
+		Size: 64,
+	}
+
+	err = fnt.CreatePreloaded()
+	if err != nil {
+		panic(err)
+	}
+
+	score := &gui.Label{
+		World: w,
+		Font:  fnt,
+		Text:  "002600",
+		Position: engo.Point{
+			0,
+			10,
+		},
+	}
+
+	score.Init()
+
+	score.SpaceComponent.Position.X = engo.GameWidth() - score.SpaceComponent.Width
+
+	texture, err = common.LoadedSprite("images/ui/playerLife3_red.png")
+	if err != nil {
+		log.Println(err)
+	}
+	lifeImg := gui.Image{
+		World:    w,
+		Texture:  texture,
+		Scale:    engo.Point{1, 1},
+		Position: engo.Point{15, 15},
+	}
+	lifeImg.Init()
+
+	lives := &gui.Label{
+		World: w,
+		Font:  fnt,
+		Text:  "X 3",
+		Position: engo.Point{
+			60,
+			10,
+		},
+	}
+
+	lives.Init()
 	// Add it to appropriate systems
 	for _, system := range w.Systems() {
 		switch sys := system.(type) {
@@ -218,7 +271,6 @@ func (ClearRocks) Type() string {
 }
 
 func (f *FallingSystem) New(w *ecs.World) {
-	fmt.Println("New FallingSystem")
 	engo.Mailbox.Listen("ClearRocks", func(message engo.Message) {
 		for _, e := range f.entities {
 			w.RemoveEntity(*e.BasicEntity)
