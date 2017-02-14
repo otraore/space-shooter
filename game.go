@@ -16,6 +16,7 @@ import (
 
 var guy Guy
 var playing = true
+var numTextures = make(map[int]*common.Texture)
 
 type Guy struct {
 	ecs.BasicEntity
@@ -34,9 +35,15 @@ type Rock struct {
 type GameScene struct{}
 
 func (GameScene) Preload() {
+
 	err := engo.Files.Load("images/ui/playerLife3_red.png", "images/playerShip3_red.png", "images/rock.png", "fonts/kenvector_future.ttf")
 	if err != nil {
 		log.Println(err)
+	}
+	engo.Files.Load("images/ui/numeralX.png")
+
+	for i := 0; i < 10; i++ {
+		engo.Files.Load(fmt.Sprintf("images/ui/numeral%v.png", i))
 	}
 
 	fmt.Println("Game Scene Preload")
@@ -61,6 +68,13 @@ func (GameScene) Setup(w *ecs.World) {
 	texture, err := common.LoadedSprite("images/playerShip3_red.png")
 	if err != nil {
 		log.Println(err)
+	}
+	for i := 0; i < 10; i++ {
+		text, err := common.LoadedSprite(fmt.Sprintf("images/ui/numeral%v.png", i))
+		if err != nil {
+			fmt.Errorf("failed to retrieve num texture: %v", err)
+		}
+		numTextures[i] = text
 	}
 
 	// Create an entity
@@ -122,17 +136,28 @@ func (GameScene) Setup(w *ecs.World) {
 	}
 	lifeImg.Init()
 
-	lives := &gui.Label{
-		World: w,
-		Font:  fnt,
-		Text:  "X 3",
-		Position: engo.Point{
-			60,
-			10,
-		},
+	lifeNum := gui.Image{
+		World:    w,
+		Texture:  numTextures[3],
+		Scale:    engo.Point{1, 1},
+		Position: engo.Point{70, 20},
+	}
+	lifeNum.Init()
+
+	texture, err = common.LoadedSprite("images/ui/numeralX.png")
+	if err != nil {
+		log.Println(err)
 	}
 
-	lives.Init()
+	x := gui.Image{
+		World:    w,
+		Texture:  texture,
+		Scale:    engo.Point{1, 1},
+		Position: engo.Point{50, 20},
+	}
+
+	x.Init()
+
 	// Add it to appropriate systems
 	for _, system := range w.Systems() {
 		switch sys := system.(type) {
