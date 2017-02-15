@@ -36,7 +36,7 @@ type GameScene struct{}
 
 func (GameScene) Preload() {
 
-	err := engo.Files.Load("images/ui/playerLife3_red.png", "images/playerShip3_red.png", "images/rock.png", "fonts/kenvector_future.ttf")
+	err := engo.Files.Load("images/ui/playerLife3_red.png", "images/playerShip3_red.png", "images/rock.png", "fonts/kenvector_future.ttf", "images/bg/purple.png")
 	if err != nil {
 		log.Println(err)
 	}
@@ -64,8 +64,28 @@ func (GameScene) Setup(w *ecs.World) {
 	w.AddSystem(&GuySystem{})
 
 	engo.Input.RegisterButton("quit", engo.Q, engo.Escape)
+	texture, err := common.LoadedSprite("images/bg/purple.png")
+	if err != nil {
+		log.Println(err)
+	}
 
-	texture, err := common.LoadedSprite("images/playerShip3_red.png")
+	gridX := int(engo.GameWidth() / texture.Width())
+	gridY := int(engo.GameHeight() / texture.Height())
+
+	for x := 0; x <= gridX; x++ {
+		for y := 0; y <= gridY; y++ {
+
+			img := gui.Image{
+				World:    w,
+				Texture:  texture,
+				Scale:    engo.Point{1, 1},
+				Position: engo.Point{float32(x) * texture.Width(), float32(y) * texture.Height()},
+			}
+			img.Init()
+		}
+	}
+
+	texture, err = common.LoadedSprite("images/playerShip3_red.png")
 	if err != nil {
 		log.Println(err)
 	}
@@ -102,7 +122,7 @@ func (GameScene) Setup(w *ecs.World) {
 	fnt := &common.Font{
 		URL:  "fonts/kenvector_future.ttf",
 		FG:   color.White,
-		Size: 64,
+		Size: 44,
 	}
 
 	err = fnt.CreatePreloaded()
@@ -116,7 +136,7 @@ func (GameScene) Setup(w *ecs.World) {
 		Text:  "002600",
 		Position: engo.Point{
 			0,
-			10,
+			30,
 		},
 	}
 
@@ -132,7 +152,7 @@ func (GameScene) Setup(w *ecs.World) {
 		World:    w,
 		Texture:  texture,
 		Scale:    engo.Point{1, 1},
-		Position: engo.Point{15, 15},
+		Position: engo.Point{15, 30},
 	}
 	lifeImg.Init()
 
@@ -140,7 +160,7 @@ func (GameScene) Setup(w *ecs.World) {
 		World:    w,
 		Texture:  numTextures[3],
 		Scale:    engo.Point{1, 1},
-		Position: engo.Point{70, 20},
+		Position: engo.Point{80, 35},
 	}
 	lifeNum.Init()
 
@@ -153,9 +173,8 @@ func (GameScene) Setup(w *ecs.World) {
 		World:    w,
 		Texture:  texture,
 		Scale:    engo.Point{1, 1},
-		Position: engo.Point{50, 20},
+		Position: engo.Point{55, 35},
 	}
-
 	x.Init()
 
 	// Add it to appropriate systems

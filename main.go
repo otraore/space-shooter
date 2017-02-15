@@ -10,5 +10,6 @@ func main() {
 		StandardInputs: true,
 	}
 
-	engo.Run(opts, &MenuScene{})
+	//engo.Run(opts, &MenuScene{})
+	engo.Run(opts, &GameScene{})
 }
