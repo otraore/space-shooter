@@ -8,7 +8,7 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
-	"github.com/otraore/go-dodger/gui"
+	"github.com/otraore/space-shooter/gui"
 )
 
 var playBtn *gui.Button
