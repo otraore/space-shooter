@@ -46,11 +46,11 @@ func (b *Button) Init() error {
 
 	b.Graphic.RenderComponent = common.RenderComponent{
 		Drawable: b.Image,
-		Scale:    engo.Point{1, 1}, //Todo: make this editable
+		Scale:    engo.Point{X: 1, Y: 1}, //Todo: make this editable
 	}
 
 	b.Graphic.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{0, 0},
+		Position: engo.Point{X: 0, Y: 0},
 		Width:    b.Image.Width(),
 		Height:   b.Image.Height(),
 	}
@@ -78,8 +78,8 @@ func (b *Button) Init() error {
 		Font:  b.Font,
 		Text:  b.Text,
 		Position: engo.Point{
-			b.Graphic.SpaceComponent.Position.X + float32(((b.Graphic.SpaceComponent.Width - float32(width)) / 2)),
-			b.Graphic.SpaceComponent.Position.Y + float32(height),
+			X: b.Graphic.SpaceComponent.Position.X + float32(((b.Graphic.SpaceComponent.Width - float32(width)) / 2)),
+			Y: b.Graphic.SpaceComponent.Position.Y + float32(height/2),
 		},
 	}
 	b.Label.Init()
@@ -98,7 +98,7 @@ type ButtonSystem struct {
 }
 
 func (c *ButtonSystem) New(w *ecs.World) {
-	fmt.Println("Created")
+	fmt.Println("Button Created")
 }
 
 func (c *ButtonSystem) Add(b *Button) {
@@ -120,7 +120,7 @@ func (c *ButtonSystem) Remove(basic ecs.BasicEntity) {
 
 func (c *ButtonSystem) Update(float32) {
 	for _, e := range c.entities {
-		pos := engo.Point{e.MouseX, e.MouseY}
+		pos := engo.Point{X: e.MouseX, Y: e.MouseY}
 		if e.Contains(pos) {
 
 			e.Graphic.RenderComponent.Drawable = e.ImageClicked

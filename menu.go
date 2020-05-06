@@ -25,7 +25,7 @@ func (MenuScene) Preload() {
 func (MenuScene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
 
-	common.SetBackground(color.White)
+	common.SetBackground(color.Black)
 
 	w.AddSystem(&common.RenderSystem{})
 
