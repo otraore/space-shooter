@@ -37,8 +37,6 @@ github.com/jfreymuth/oggvorbis v1.0.0 h1:aOpiihGrFLXpsh2osOlEvTcg5/aluzGQeC7m3uY
 github.com/jfreymuth/oggvorbis v1.0.0/go.mod h1:abe6F9QRjuU9l+2jek3gj46lu40N4qlYxh2grqkLEDM=
 github.com/jfreymuth/vorbis v1.0.0 h1:SmDf783s82lIjGZi8EGUUaS7YxPHgRj4ZXW/h7rUi7U=
 github.com/jfreymuth/vorbis v1.0.0/go.mod h1:8zy3lUAm9K/rJJk223RKy6vjCZTWC61NA2QD06bfOE0=
-github.com/otraore/space-shooter v0.0.0-20170416213420-357b36704265 h1:mpr9tArfzbA2MyUdg0C8D+hwWEpnua2tgCxCq/cS1vc=
-github.com/otraore/space-shooter v0.0.0-20170416213420-357b36704265/go.mod h1:qbqCB0YFzSAZi25DUr0uLoALkmSxclJo1gTpf4RTJso=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/srwiley/oksvg v0.0.0-20190105194046-ccbc7673cdf3 h1:8REQ/vZZIZFaZedUSHd7TVkK0CF4heqGtmyz30gCxm8=
 github.com/srwiley/oksvg v0.0.0-20190105194046-ccbc7673cdf3/go.mod h1:afMbS0qvv1m5tfENCwnOdZGOF8RGR/FsZ7bvBxQGZG4=

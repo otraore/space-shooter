@@ -42,7 +42,9 @@ func (GameScene) Preload() {
 	fmt.Println("Game Scene Preload")
 }
 
-func (GameScene) Setup(w *ecs.World) {
+func (GameScene) Setup(u engo.Updater) {
+	w, _ := u.(*ecs.World)
+
 	fmt.Println("Game Scene Setup")
 
 	common.SetBackground(color.Black)
@@ -56,7 +58,7 @@ func (GameScene) Setup(w *ecs.World) {
 	w.AddSystem(&RockSpawnSystem{})
 	w.AddSystem(&GuySystem{})
 
-	engo.Input.RegisterButton("quit", engo.Q, engo.Escape)
+	engo.Input.RegisterButton("quit", engo.KeyQ, engo.KeyEscape)
 
 	texture, err := common.LoadedSprite("images/playerShip3_red.png")
 	if err != nil {
@@ -81,8 +83,7 @@ func (GameScene) Setup(w *ecs.World) {
 		Height:   height,
 	}
 	guy.CollisionComponent = common.CollisionComponent{
-		Solid: true,
-		Main:  true,
+		Main: 1,
 	}
 
 	fnt := &common.Font{
@@ -244,7 +245,7 @@ func NewRock(world *ecs.World, position engo.Point) {
 		Width:    texture.Width() * rock.RenderComponent.Scale.X,
 		Height:   texture.Height() * rock.RenderComponent.Scale.Y,
 	}
-	rock.CollisionComponent = common.CollisionComponent{Solid: true}
+	rock.CollisionComponent = common.CollisionComponent{}
 
 	for _, system := range world.Systems() {
 		switch sys := system.(type) {
