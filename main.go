@@ -1,6 +1,6 @@
 package main
 
-import "engo.io/engo"
+import "github.com/EngoEngine/engo"
 
 func main() {
 	opts := engo.RunOptions{
