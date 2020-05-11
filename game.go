@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"log"
 	"math/rand"
+	"strconv"
 
 	"time"
 
@@ -14,8 +15,12 @@ import (
 	"github.com/otraore/space-shooter/gui"
 )
 
-var guy Guy
-var playing = true
+var (
+	guy        Guy
+	playing    = true
+	livesLeft  = 3
+	livesLabel *gui.Label
+)
 
 type Guy struct {
 	ecs.BasicEntity
@@ -34,7 +39,7 @@ type Rock struct {
 type GameScene struct{}
 
 func (GameScene) Preload() {
-	err := engo.Files.Load("images/ui/playerLife3_red.png", "images/playerShip3_red.png", "images/rock.png", "fonts/kenvector_future.ttf")
+	err := engo.Files.Load("spritesheets/sheet.xml", "images/rock.png", "fonts/kenvector_future.ttf")
 	if err != nil {
 		log.Println(err)
 	}
@@ -60,7 +65,7 @@ func (GameScene) Setup(u engo.Updater) {
 
 	engo.Input.RegisterButton("quit", engo.KeyQ, engo.KeyEscape)
 
-	texture, err := common.LoadedSprite("images/playerShip3_red.png")
+	texture, err := common.LoadedSprite("playerShip3_orange.png")
 	if err != nil {
 		log.Println(err)
 	}
@@ -71,19 +76,19 @@ func (GameScene) Setup(u engo.Updater) {
 	// Initialize the components, set scale to 4x
 	guy.RenderComponent = common.RenderComponent{
 		Drawable: texture,
-		Scale:    engo.Point{1, 1},
+		Scale:    engo.Point{X: 1, Y: 1},
 	}
 
-	fmt.Println(engo.GameWidth())
 	width := texture.Width() * guy.RenderComponent.Scale.X
 	height := texture.Height() * guy.RenderComponent.Scale.Y
 	guy.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{(engo.GameWidth() / 2) - width, engo.GameHeight() - height},
+		Position: engo.Point{X: (engo.GameWidth() / 2) - width, Y: engo.GameHeight() - height},
 		Width:    width,
 		Height:   height,
 	}
 	guy.CollisionComponent = common.CollisionComponent{
-		Main: 1,
+		Main:  1,
+		Group: 1,
 	}
 
 	fnt := &common.Font{
@@ -102,8 +107,8 @@ func (GameScene) Setup(u engo.Updater) {
 		Font:  fnt,
 		Text:  "002600",
 		Position: engo.Point{
-			0,
-			10,
+			X: 0,
+			Y: 10,
 		},
 	}
 
@@ -111,29 +116,29 @@ func (GameScene) Setup(u engo.Updater) {
 
 	score.SpaceComponent.Position.X = engo.GameWidth() - score.SpaceComponent.Width
 
-	texture, err = common.LoadedSprite("images/ui/playerLife3_red.png")
+	texture, err = common.LoadedSprite("playerLife3_red.png")
 	if err != nil {
 		log.Println(err)
 	}
 	lifeImg := gui.Image{
 		World:    w,
 		Texture:  texture,
-		Scale:    engo.Point{1, 1},
-		Position: engo.Point{15, 15},
+		Scale:    engo.Point{X: 1, Y: 1},
+		Position: engo.Point{X: 15, Y: 15},
 	}
 	lifeImg.Init()
 
-	lives := &gui.Label{
+	livesLabel = &gui.Label{
 		World: w,
 		Font:  fnt,
-		Text:  "X 3",
+		Text:  "X " + strconv.Itoa(livesLeft),
 		Position: engo.Point{
-			60,
-			10,
+			X: 60,
+			Y: 10,
 		},
 	}
 
-	lives.Init()
+	livesLabel.Init()
 	// Add it to appropriate systems
 	for _, system := range w.Systems() {
 		switch sys := system.(type) {
@@ -206,11 +211,18 @@ func (c *ControlSystem) Update(dt float32) {
 }
 
 type RockSpawnSystem struct {
-	world *ecs.World
+	world   *ecs.World
+	texture *common.Texture
 }
 
 func (rock *RockSpawnSystem) New(w *ecs.World) {
 	rock.world = w
+	texture, err := common.LoadedSprite("images/rock.png")
+	if err != nil {
+		log.Println(err)
+	}
+
+	rock.texture = texture
 }
 
 func (*RockSpawnSystem) Remove(ecs.BasicEntity) {}
@@ -225,29 +237,24 @@ func (rock *RockSpawnSystem) Update(dt float32) {
 			X: rand.Float32() * engo.GameWidth(),
 			Y: -32,
 		}
-		NewRock(rock.world, position)
+		rock.NewRock(position)
 	}
 }
 
-func NewRock(world *ecs.World, position engo.Point) {
-	texture, err := common.LoadedSprite("images/rock.png")
-	if err != nil {
-		log.Println(err)
-	}
-
+func (rs *RockSpawnSystem) NewRock(position engo.Point) {
 	rock := Rock{BasicEntity: ecs.NewBasic()}
 	rock.RenderComponent = common.RenderComponent{
-		Drawable: texture,
-		Scale:    engo.Point{4, 4},
+		Drawable: rs.texture,
+		Scale:    engo.Point{X: 4, Y: 4},
 	}
 	rock.SpaceComponent = common.SpaceComponent{
 		Position: position,
-		Width:    texture.Width() * rock.RenderComponent.Scale.X,
-		Height:   texture.Height() * rock.RenderComponent.Scale.Y,
+		Width:    rs.texture.Width() * rock.RenderComponent.Scale.X,
+		Height:   rs.texture.Height() * rock.RenderComponent.Scale.Y,
 	}
-	rock.CollisionComponent = common.CollisionComponent{}
+	rock.CollisionComponent = common.CollisionComponent{Group: 1}
 
-	for _, system := range world.Systems() {
+	for _, system := range rs.world.Systems() {
 		switch sys := system.(type) {
 		case *common.RenderSystem:
 			sys.Add(&rock.BasicEntity, &rock.RenderComponent, &rock.SpaceComponent)
@@ -280,6 +287,8 @@ func (f *FallingSystem) New(w *ecs.World) {
 			w.RemoveEntity(*e.BasicEntity)
 		}
 		playing = false
+		livesLeft--
+		livesLabel.SetText("X " + strconv.Itoa(livesLeft))
 		go func() {
 			time.Sleep(5 * time.Second)
 			playing = true
@@ -310,6 +319,10 @@ func (f *FallingSystem) Update(dt float32) {
 
 	for _, e := range f.entities {
 		e.SpaceComponent.Position.Y += speed
+
+		if e.SpaceComponent.Position.Y > engo.GameHeight() {
+			f.Remove(*e.BasicEntity)
+		}
 	}
 }
 
@@ -347,7 +360,6 @@ type GuySystem struct {
 }
 
 func (g *GuySystem) New(w *ecs.World) {
-	fmt.Println(engo.GameWidth())
 	guy.SpaceComponent.Position.Y = engo.GameHeight() - guy.SpaceComponent.Height
 	guy.SpaceComponent.Position.X = (engo.GameWidth() / 2) - guy.SpaceComponent.Width
 }

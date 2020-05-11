@@ -40,6 +40,8 @@ func (MenuScene) Setup(u engo.Updater) {
 		panic(err)
 	}
 
+	w.AddSystem(&common.FPSSystem{Display: true, Font: fnt})
+
 	//Retrieve a texture
 	texture, err := common.LoadedSprite("images/button_silver.png")
 	if err != nil {
@@ -79,7 +81,7 @@ func (MenuScene) Setup(u engo.Updater) {
 		Image:        texture,
 		ImageClicked: textureClicked,
 		Font:         fnt,
-		Position:     engo.Point{x, y},
+		Position:     engo.Point{X: x, Y: y},
 	}
 	exitBtn.Init()
 

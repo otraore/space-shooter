@@ -1,6 +1,8 @@
 package gui
 
 import (
+	"errors"
+
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
@@ -44,21 +46,19 @@ func (l *Label) Init() {
 	}
 }
 
-func (l *Label) SetText(s string) bool {
+func (l *Label) SetText(s string) error {
 	if l.Font == nil {
-		panic("Label.SetText called without setting Label.Font")
+		return errors.New("Label.SetText called without setting Label.Font")
 	}
 
 	if l.cache == s {
-		return false
+		return nil
 	}
 
-	if l.RenderComponent.Drawable == nil {
-		l.RenderComponent.Drawable = common.Text{Font: l.Font}
+	l.RenderComponent.Drawable.Close()
+	l.RenderComponent.Drawable = common.Text{
+		Font: l.Font,
+		Text: s,
 	}
-
-	fnt := l.RenderComponent.Drawable.(common.Text)
-	fnt.Text = s
-
-	return true
+	return nil
 }
