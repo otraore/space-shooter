@@ -16,25 +16,25 @@ type Graphic struct {
 }
 
 type Button struct {
-	Label          Label
-	Graphic        Graphic
-	Image          *common.Texture
-	ImageClicked   *common.Texture
-	Position       engo.Point
-	World          *ecs.World
-	Enabled        bool
-	Text           string
-	Font           *common.Font
-	OnMouseOut     func(*Button)
-	EventListeners map[string][]func()
+	Base
+	Label        *Label
+	Graphic      Graphic
+	Image        *common.Texture
+	ImageClicked *common.Texture
+	Position     engo.Point
+	World        *ecs.World
+	Enabled      bool
+	Text         string
+	Font         *common.Font
+	OnMouseOut   func(*Button)
 }
 
 func (b *Button) OnClick(f func()) {
-	b.EventListeners["click"] = append(b.EventListeners["click"], f)
+	b.EventListeners[EventMouseClicked{}.Type()] = append(b.EventListeners[EventMouseClicked{}.Type()], f)
 }
 
 func (b *Button) OnMouseOver(f func()) {
-	b.EventListeners["mouse_over"] = append(b.EventListeners["mouse_over"], f)
+	b.EventListeners[EventMouseOver{}.Type()] = append(b.EventListeners[EventMouseOver{}.Type()], f)
 }
 
 func (b *Button) Init() error {
@@ -50,7 +50,7 @@ func (b *Button) Init() error {
 	}
 
 	b.Graphic.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{X: 0, Y: 0},
+		Position: engo.Point{X: b.Position.X, Y: b.Position.Y},
 		Width:    b.Image.Width(),
 		Height:   b.Image.Height(),
 	}
@@ -63,17 +63,16 @@ func (b *Button) Init() error {
 
 	for _, system := range b.World.Systems() {
 		switch sys := system.(type) {
+		case *common.RenderSystem:
+			sys.Add(&b.Graphic.BasicEntity, &b.Graphic.RenderComponent, &b.Graphic.SpaceComponent)
 		case *common.MouseSystem:
 			sys.Add(&b.Graphic.BasicEntity, &b.Graphic.MouseComponent, &b.Graphic.SpaceComponent, &b.Graphic.RenderComponent)
 		case *ButtonSystem:
 			sys.Add(b)
-		case *common.RenderSystem:
-			sys.Add(&b.Graphic.BasicEntity, &b.Graphic.RenderComponent, &b.Graphic.SpaceComponent)
 		}
-
 	}
 
-	b.Label = Label{
+	b.Label = NewLabel(Label{
 		World: b.World,
 		Font:  b.Font,
 		Text:  b.Text,
@@ -81,15 +80,11 @@ func (b *Button) Init() error {
 			X: b.Graphic.SpaceComponent.Position.X + float32(((b.Graphic.SpaceComponent.Width - float32(width)) / 2)),
 			Y: b.Graphic.SpaceComponent.Position.Y + float32(height/2),
 		},
-	}
-	b.Label.Init()
+	})
 	return nil
 }
 
 type buttonEntity struct {
-	*ecs.BasicEntity
-	*common.SpaceComponent
-	*common.MouseComponent
 	*Button
 }
 
@@ -102,13 +97,13 @@ func (c *ButtonSystem) New(w *ecs.World) {
 }
 
 func (c *ButtonSystem) Add(b *Button) {
-	c.entities = append(c.entities, buttonEntity{&b.Graphic.BasicEntity, &b.Graphic.SpaceComponent, &b.Graphic.MouseComponent, b})
+	c.entities = append(c.entities, buttonEntity{b})
 }
 
 func (c *ButtonSystem) Remove(basic ecs.BasicEntity) {
 	delete := -1
 	for index, e := range c.entities {
-		if e.BasicEntity.ID() == basic.ID() {
+		if e.Graphic.BasicEntity.ID() == basic.ID() {
 			delete = index
 			break
 		}
@@ -119,25 +114,26 @@ func (c *ButtonSystem) Remove(basic ecs.BasicEntity) {
 }
 
 func (c *ButtonSystem) Update(float32) {
+	curPos := engo.Point{X: engo.Input.Mouse.X, Y: engo.Input.Mouse.Y}
+	cursorHand := false
 	for _, e := range c.entities {
-		pos := engo.Point{X: e.MouseX, Y: e.MouseY}
-		if e.Contains(pos) {
-
+		if e.Graphic.Contains(curPos) {
 			e.Graphic.RenderComponent.Drawable = e.ImageClicked
-			engo.SetCursor(engo.CursorHand)
-			for _, f := range e.EventListeners["mouse_over"] {
-				f()
-			}
-			if e.MouseComponent.Clicked {
+			cursorHand = true
+			e.DispatchEvents(EventMouseOver{})
+
+			if e.Graphic.MouseComponent.Clicked {
 				e.Graphic.RenderComponent.Drawable = e.ImageClicked
-				for _, f := range e.EventListeners["click"] {
-					f()
-				}
+				e.DispatchEvents(EventMouseClicked{})
 			}
 		} else {
-			engo.SetCursor(engo.CursorNone)
 			e.Graphic.RenderComponent.Drawable = e.Image
 		}
+	}
 
+	if cursorHand {
+		engo.SetCursor(engo.CursorHand)
+	} else {
+		engo.SetCursor(engo.CursorNone)
 	}
 }

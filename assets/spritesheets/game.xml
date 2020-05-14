@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:70e60c0c1b38fe3c99906d93f830b334:275d0c93713a4a80c173eeca0ac9e0c6:dbeebaa39fd49ae9780c488f0128c248$ -->
+<TextureAtlas imagePath="game.png" width="450" height="1032">
+    <SubTexture name="backgrounds/black" x="1" y="1" width="256" height="256"/>
+    <SubTexture name="backgrounds/blue" x="1" y="259" width="256" height="256"/>
+    <SubTexture name="backgrounds/darkPurple" x="1" y="517" width="256" height="256"/>
+    <SubTexture name="backgrounds/purple" x="1" y="775" width="256" height="256"/>
+    <SubTexture name="rocks/meteorBrown_big1" x="259" y="355" width="101" height="84"/>
+    <SubTexture name="rocks/meteorBrown_big2" x="259" y="1" width="120" height="98"/>
+    <SubTexture name="rocks/meteorBrown_big3" x="360" y="534" width="89" height="82"/>
+    <SubTexture name="rocks/meteorBrown_big4" x="259" y="749" width="98" height="96"/>
+    <SubTexture name="rocks/meteorBrown_med1" x="381" y="85" width="43" height="43"/>
+    <SubTexture name="rocks/meteorBrown_med3" x="381" y="1" width="45" height="40"/>
+    <SubTexture name="rocks/meteorBrown_small1" x="359" y="1002" width="28" height="28"/>
+    <SubTexture name="rocks/meteorBrown_small2" x="381" y="175" width="29" height="26"/>
+    <SubTexture name="rocks/meteorBrown_tiny1" x="428" y="1" width="18" height="18"/>
+    <SubTexture name="rocks/meteorBrown_tiny2" x="428" y="41" width="16" height="15"/>
+    <SubTexture name="rocks/meteorGrey_big1" x="362" y="431" rotated="true" width="84" height="101"/>
+    <SubTexture name="rocks/meteorGrey_big2" x="259" y="101" width="120" height="98"/>
+    <SubTexture name="rocks/meteorGrey_big3" x="360" y="618" width="89" height="82"/>
+    <SubTexture name="rocks/meteorGrey_big4" x="259" y="847" width="98" height="96"/>
+    <SubTexture name="rocks/meteorGrey_med1" x="381" y="130" width="43" height="43"/>
+    <SubTexture name="rocks/meteorGrey_med2" x="381" y="43" width="45" height="40"/>
+    <SubTexture name="rocks/meteorGrey_small1" x="389" y="1002" width="28" height="28"/>
+    <SubTexture name="rocks/meteorGrey_small2" x="412" y="175" width="29" height="26"/>
+    <SubTexture name="rocks/meteorGrey_tiny1" x="428" y="21" width="18" height="18"/>
+    <SubTexture name="rocks/meteorGrey_tiny2" x="428" y="58" width="16" height="15"/>
+    <SubTexture name="ships/blue1" x="259" y="441" width="99" height="75"/>
+    <SubTexture name="ships/blue2" x="259" y="201" width="112" height="75"/>
+    <SubTexture name="ships/blue3" x="360" y="702" rotated="true" width="75" height="98"/>
+    <SubTexture name="ships/green1" x="259" y="518" width="99" height="75"/>
+    <SubTexture name="ships/green2" x="373" y="203" rotated="true" width="75" height="112"/>
+    <SubTexture name="ships/green3" x="359" y="802" rotated="true" width="75" height="98"/>
+    <SubTexture name="ships/orange1" x="259" y="595" width="99" height="75"/>
+    <SubTexture name="ships/orange2" x="259" y="278" width="112" height="75"/>
+    <SubTexture name="ships/orange3" x="259" y="945" width="98" height="75"/>
+    <SubTexture name="ships/red1" x="259" y="672" width="99" height="75"/>
+    <SubTexture name="ships/red2" x="373" y="317" rotated="true" width="75" height="112"/>
+    <SubTexture name="ships/red3" x="359" y="902" rotated="true" width="75" height="98"/>
+</TextureAtlas>

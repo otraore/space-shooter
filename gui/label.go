@@ -20,7 +20,7 @@ type Label struct {
 	common.SpaceComponent
 }
 
-func (l *Label) Init() {
+func NewLabel(l Label) *Label {
 	l.BasicEntity = ecs.NewBasic()
 
 	width, height, _ := l.Font.TextDimensions(l.Text)
@@ -44,6 +44,8 @@ func (l *Label) Init() {
 		}
 
 	}
+
+	return &l
 }
 
 func (l *Label) SetText(s string) error {

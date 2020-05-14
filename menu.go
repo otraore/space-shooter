@@ -11,12 +11,16 @@ import (
 	"github.com/otraore/space-shooter/gui"
 )
 
-var playBtn *gui.Button
+const (
+	btnImage        = "images/ui/button_silver.png"
+	btnImageClicked = "images/ui/button_gold.png"
+	uiFont          = "fonts/kenvector_future.ttf"
+)
 
 type MenuScene struct{}
 
 func (MenuScene) Preload() {
-	err := engo.Files.Load("images/button_silver.png", "images/button_gold.png", "fonts/kenvector_future.ttf")
+	err := engo.Files.Load(btnImage, btnImageClicked, uiFont)
 	if err != nil {
 		panic(err)
 	}
@@ -25,12 +29,10 @@ func (MenuScene) Preload() {
 func (MenuScene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
 
-	common.SetBackground(color.Black)
-
 	w.AddSystem(&common.RenderSystem{})
 
 	fnt := &common.Font{
-		URL:  "fonts/kenvector_future.ttf",
+		URL:  uiFont,
 		FG:   color.White,
 		Size: 64,
 	}
@@ -42,13 +44,12 @@ func (MenuScene) Setup(u engo.Updater) {
 
 	w.AddSystem(&common.FPSSystem{Display: true, Font: fnt})
 
-	//Retrieve a texture
-	texture, err := common.LoadedSprite("images/button_silver.png")
+	texture, err := common.LoadedSprite(btnImage)
 	if err != nil {
 		log.Println(err)
 	}
 
-	textureClicked, err := common.LoadedSprite("images/button_gold.png")
+	textureClicked, err := common.LoadedSprite(btnImageClicked)
 	if err != nil {
 		log.Println(err)
 	}
@@ -58,13 +59,13 @@ func (MenuScene) Setup(u engo.Updater) {
 
 	fmt.Println(texture.Width())
 
-	playBtn = &gui.Button{
+	playBtn := &gui.Button{
 		Text:         "Play",
 		World:        w,
 		Image:        texture,
 		ImageClicked: textureClicked,
 		Font:         fnt,
-		Position:     engo.Point{x, y},
+		Position:     engo.Point{X: x, Y: y},
 	}
 
 	playBtn.Init()
@@ -73,15 +74,13 @@ func (MenuScene) Setup(u engo.Updater) {
 		engo.SetScene(GameScene{}, true)
 	})
 
-	y += texture.Height() + 30
-
 	exitBtn := &gui.Button{
 		Text:         "Exit",
 		World:        w,
 		Image:        texture,
 		ImageClicked: textureClicked,
 		Font:         fnt,
-		Position:     engo.Point{X: x, Y: y},
+		Position:     engo.Point{X: x, Y: y + texture.Height() + 30},
 	}
 	exitBtn.Init()
 
