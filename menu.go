@@ -15,12 +15,13 @@ const (
 	btnImage        = "images/ui/button_silver.png"
 	btnImageClicked = "images/ui/button_gold.png"
 	uiFont          = "fonts/kenvector_future.ttf"
+	gameSheet       = "spritesheets/game.xml"
 )
 
 type MenuScene struct{}
 
 func (MenuScene) Preload() {
-	err := engo.Files.Load(btnImage, btnImageClicked, uiFont)
+	err := engo.Files.Load(gameSheet, btnImage, btnImageClicked, uiFont)
 	if err != nil {
 		panic(err)
 	}
@@ -59,35 +60,36 @@ func (MenuScene) Setup(u engo.Updater) {
 
 	fmt.Println(texture.Width())
 
-	playBtn := &gui.Button{
+	playBtn, err := gui.NewButton(gui.Button{
 		Text:         "Play",
 		World:        w,
 		Image:        texture,
 		ImageClicked: textureClicked,
 		Font:         fnt,
 		Position:     engo.Point{X: x, Y: y},
-	}
-
-	playBtn.Init()
+	})
 
 	playBtn.OnClick(func() {
 		engo.SetScene(GameScene{}, true)
 	})
 
-	exitBtn := &gui.Button{
+	exitBtn, err := gui.NewButton(gui.Button{
 		Text:         "Exit",
 		World:        w,
 		Image:        texture,
 		ImageClicked: textureClicked,
 		Font:         fnt,
 		Position:     engo.Point{X: x, Y: y + texture.Height() + 30},
-	}
-	exitBtn.Init()
+	})
 
 	exitBtn.OnClick(func() {
 		engo.Exit()
 	})
 
+	err = gui.SetBackgroundImage(w, "backgrounds/darkPurple.png")
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func (MenuScene) Type() string { return "MenuScene" }

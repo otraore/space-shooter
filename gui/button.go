@@ -8,6 +8,8 @@ import (
 	"github.com/EngoEngine/engo/common"
 )
 
+var btnSystemsAdded = false
+
 type Graphic struct {
 	ecs.BasicEntity
 	common.RenderComponent
@@ -37,7 +39,7 @@ func (b *Button) OnMouseOver(f func()) {
 	b.EventListeners[EventMouseOver{}.Type()] = append(b.EventListeners[EventMouseOver{}.Type()], f)
 }
 
-func (b *Button) Init() error {
+func NewButton(b Button) (*Button, error) {
 	b.EventListeners = make(map[string][]func())
 
 	b.Graphic.BasicEntity = ecs.NewBasic()
@@ -54,23 +56,25 @@ func (b *Button) Init() error {
 		Width:    b.Image.Width(),
 		Height:   b.Image.Height(),
 	}
-	width, height, _ := b.Font.TextDimensions(b.Text)
 
 	b.Graphic.SpaceComponent.Position = b.Position
 
-	b.World.AddSystem(&common.MouseSystem{})
-	b.World.AddSystem(&ButtonSystem{})
+	// Make sure only one instance of the systems are added
+	if !btnSystemsAdded {
+		b.World.AddSystem(&ButtonSystem{})
+		btnSystemsAdded = true
+	}
 
 	for _, system := range b.World.Systems() {
 		switch sys := system.(type) {
 		case *common.RenderSystem:
 			sys.Add(&b.Graphic.BasicEntity, &b.Graphic.RenderComponent, &b.Graphic.SpaceComponent)
-		case *common.MouseSystem:
-			sys.Add(&b.Graphic.BasicEntity, &b.Graphic.MouseComponent, &b.Graphic.SpaceComponent, &b.Graphic.RenderComponent)
 		case *ButtonSystem:
-			sys.Add(b)
+			sys.Add(&b)
 		}
 	}
+
+	width, height, _ := b.Font.TextDimensions(b.Text)
 
 	b.Label = NewLabel(Label{
 		World: b.World,
@@ -81,7 +85,7 @@ func (b *Button) Init() error {
 			Y: b.Graphic.SpaceComponent.Position.Y + float32(height/2),
 		},
 	})
-	return nil
+	return &b, nil
 }
 
 type buttonEntity struct {
@@ -114,16 +118,16 @@ func (c *ButtonSystem) Remove(basic ecs.BasicEntity) {
 }
 
 func (c *ButtonSystem) Update(float32) {
+	btnHovered := false
 	curPos := engo.Point{X: engo.Input.Mouse.X, Y: engo.Input.Mouse.Y}
-	cursorHand := false
 	for _, e := range c.entities {
 		if e.Graphic.Contains(curPos) {
 			e.Graphic.RenderComponent.Drawable = e.ImageClicked
-			cursorHand = true
+			btnHovered = true
 			e.DispatchEvents(EventMouseOver{})
 
-			if e.Graphic.MouseComponent.Clicked {
-				e.Graphic.RenderComponent.Drawable = e.ImageClicked
+			if engo.Input.Mouse.Action == engo.Press && engo.Input.Mouse.Button == engo.MouseButtonLeft {
+				e.Graphic.RenderComponent.Drawable = e.Image
 				e.DispatchEvents(EventMouseClicked{})
 			}
 		} else {
@@ -131,7 +135,7 @@ func (c *ButtonSystem) Update(float32) {
 		}
 	}
 
-	if cursorHand {
+	if btnHovered {
 		engo.SetCursor(engo.CursorHand)
 	} else {
 		engo.SetCursor(engo.CursorNone)
