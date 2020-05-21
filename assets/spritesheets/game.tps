@@ -26,7 +26,7 @@
             </struct>
         </array>
         <key>allowRotation</key>
-        <true/>
+        <false/>
         <key>shapeDebug</key>
         <false/>
         <key>dpi</key>
@@ -56,7 +56,7 @@
         <key>jxrCompressionLevel</key>
         <uint>0</uint>
         <key>ditherType</key>
-        <enum type="SettingsBase::DitherType">NearestNeighbour</enum>
+        <enum type="SettingsBase::DitherType">PngQuantLow</enum>
         <key>backgroundColor</key>
         <uint>0</uint>
         <key>libGdx</key>
@@ -82,7 +82,7 @@
         <key>atfFormats</key>
         <string></string>
         <key>textureFormat</key>
-        <enum type="SettingsBase::TextureFormat">png</enum>
+        <enum type="SettingsBase::TextureFormat">png8</enum>
         <key>borderPadding</key>
         <uint>0</uint>
         <key>maxTextureSize</key>
@@ -196,6 +196,96 @@
                 <rect>64,64,128,128</rect>
                 <key>scale9Paddings</key>
                 <rect>64,64,128,128</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/buttons/blue.png</key>
+            <key type="filename">../images/buttons/blue2.png</key>
+            <key type="filename">../images/buttons/green.png</key>
+            <key type="filename">../images/buttons/red.png</key>
+            <key type="filename">../images/buttons/yellow.png</key>
+            <key type="filename">../images/buttons/yellow2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>56,10,111,19</rect>
+                <key>scale9Paddings</key>
+                <rect>56,10,111,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/buttons/blue_pressed.png</key>
+            <key type="filename">../images/buttons/yellow_pressed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>48,11,95,23</rect>
+                <key>scale9Paddings</key>
+                <rect>48,11,95,23</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lives/blue1.png</key>
+            <key type="filename">../images/lives/green1.png</key>
+            <key type="filename">../images/lives/orange1.png</key>
+            <key type="filename">../images/lives/red1.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,7,17,13</rect>
+                <key>scale9Paddings</key>
+                <rect>8,7,17,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lives/blue2.png</key>
+            <key type="filename">../images/lives/green2.png</key>
+            <key type="filename">../images/lives/orange2.png</key>
+            <key type="filename">../images/lives/red2.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,7,19,13</rect>
+                <key>scale9Paddings</key>
+                <rect>9,7,19,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lives/blue3.png</key>
+            <key type="filename">../images/lives/green3.png</key>
+            <key type="filename">../images/lives/orange3.png</key>
+            <key type="filename">../images/lives/red3.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,7,16,13</rect>
+                <key>scale9Paddings</key>
+                <rect>8,7,16,13</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -399,12 +489,45 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">../images/ui/cursor.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,15,17</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,15,17</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/ui/grey_panel.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>25,25,50,50</rect>
+                <key>scale9Paddings</key>
+                <rect>25,25,50,50</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
         </map>
         <key>fileList</key>
         <array>
             <filename>../images/backgrounds</filename>
             <filename>../images/ships</filename>
             <filename>../images/rocks</filename>
+            <filename>../images/lives</filename>
+            <filename>../images/buttons</filename>
+            <filename>../images/ui</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

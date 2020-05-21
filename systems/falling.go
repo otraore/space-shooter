@@ -16,11 +16,14 @@ type fallingEntity struct {
 
 type FallingSystem struct {
 	entities []fallingEntity
+	world    *ecs.World
 }
 
 func (f *FallingSystem) New(w *ecs.World) {
+	f.world = w
 	engo.Mailbox.Listen(ClearRocks{}.Type(), func(message engo.Message) {
 		for _, e := range f.entities {
+			f.Remove(*e.BasicEntity)
 			w.RemoveEntity(*e.BasicEntity)
 		}
 
@@ -37,21 +40,26 @@ func (f *FallingSystem) Add(basic *ecs.BasicEntity, space *common.SpaceComponent
 }
 
 func (f *FallingSystem) Remove(basic ecs.BasicEntity) {
-	delete := -1
-	for index, e := range f.entities {
+	for i, e := range f.entities {
 		if e.BasicEntity.ID() == basic.ID() {
-			delete = index
+			for _, system := range f.world.Systems() {
+				switch system.(type) {
+				case *FallingSystem:
+				case *common.RenderSystem:
+				default:
+					system.Remove(*e.BasicEntity)
+				}
+			}
+			f.entities = append(f.entities[:i], f.entities[i+1:]...)
 			break
 		}
-	}
-	if delete >= 0 {
-		f.entities = append(f.entities[:delete], f.entities[delete+1:]...)
 	}
 }
 
 func (f *FallingSystem) Update(dt float32) {
 	speed := 400 * dt
 
+	// log.Println("num rocks:", len(f.entities))
 	for _, e := range f.entities {
 		e.SpaceComponent.Position.Y += speed
 

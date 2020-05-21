@@ -21,7 +21,7 @@ var (
 type GameScene struct{}
 
 func (GameScene) Preload() {
-	err := engo.Files.Load("spritesheets/game.xml", "images/rock.png", "images/playerLife3_red.png")
+	err := engo.Files.Load("spritesheets/game.xml")
 	if err != nil {
 		log.Println(err)
 	}
@@ -30,24 +30,23 @@ func (GameScene) Preload() {
 }
 
 func (GameScene) Setup(u engo.Updater) {
+	engo.SetCursorVisibility(false)
 	w, _ := u.(*ecs.World)
 
 	fnt := &common.Font{
-		URL:  "fonts/kenvector_future.ttf",
+		URL:  uiFont,
 		FG:   color.White,
 		Size: 30,
 	}
 
 	err := fnt.CreatePreloaded()
-	if err != nil {
-		panic(err)
-	}
+	handleErr(err)
 
 	// Create the ship object
 	ship = systems.Ship{
 		BasicEntity: ecs.NewBasic(),
 		LivesLeft:   10,
-		Color:       "red",
+		Color:       "orange",
 		Type:        "1",
 		Font:        fnt,
 	}
@@ -63,9 +62,7 @@ func (GameScene) Setup(u engo.Updater) {
 	engo.Input.RegisterButton("quit", engo.KeyQ, engo.KeyEscape)
 
 	texture, err := common.LoadedSprite(ship.AssetURL())
-	if err != nil {
-		log.Println(err)
-	}
+	handleErr(err)
 
 	ship.RenderComponent = common.RenderComponent{
 		Drawable: texture,
@@ -96,10 +93,9 @@ func (GameScene) Setup(u engo.Updater) {
 
 	score.SpaceComponent.Position.X = engo.GameWidth() - score.SpaceComponent.Width
 
-	texture, err = common.LoadedSprite("images/playerLife3_red.png")
-	if err != nil {
-		log.Println(err)
-	}
+	texture, err = common.LoadedSprite("lives/red3.png")
+	handleErr(err)
+
 	lifeImg := gui.Image{
 		World:    w,
 		Texture:  texture,
@@ -123,9 +119,7 @@ func (GameScene) Setup(u engo.Updater) {
 	}
 
 	err = gui.SetBackgroundImage(w, "backgrounds/blue.png")
-	if err != nil {
-		log.Println(err)
-	}
+	handleErr(err)
 
 	engo.Mailbox.Dispatch(systems.SpawnRocks{})
 	log.Println("Start game, lives remaining: ", ship.LivesLeft)

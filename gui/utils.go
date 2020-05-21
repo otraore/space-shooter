@@ -14,6 +14,12 @@ type BackgroundImage struct {
 	common.SpaceComponent
 }
 
+type basic struct {
+	ecs.BasicEntity
+	common.RenderComponent
+	common.SpaceComponent
+}
+
 func SetBackgroundImage(w *ecs.World, imageUrl string) error {
 	bg := &BackgroundImage{BasicEntity: ecs.NewBasic()}
 

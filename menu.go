@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 
@@ -12,16 +11,28 @@ import (
 )
 
 const (
-	btnImage        = "images/ui/button_silver.png"
-	btnImageClicked = "images/ui/button_gold.png"
-	uiFont          = "fonts/kenvector_future.ttf"
-	gameSheet       = "spritesheets/game.xml"
+	mainBtnImage        = "buttons/yellow.png"
+	mainBtnImageClicked = "buttons/yellow_pressed.png"
+	btnImage            = "buttons/blue.png"
+	btnImageClicked     = "buttons/blue_pressed.png"
+	greyPanelImage      = "ui/grey_panel.png"
+	uiFont              = "fonts/kenvector_future_thin.ttf"
+	gameSheet           = "spritesheets/game.xml"
+	btnWidth            = 340
+	btnHeight           = 70
+	panelWidth          = 450
+	panelHeight         = 400
+	offsetY             = 5
+	btnMargin           = 20
 )
+
+var colorYellow = &color.RGBA{R: 255, G: 204, B: 0, A: 255}
+var colorDirtyBlue = &color.RGBA{R: 63, G: 124, B: 182, A: 255}
 
 type MenuScene struct{}
 
 func (MenuScene) Preload() {
-	err := engo.Files.Load(gameSheet, btnImage, btnImageClicked, uiFont)
+	err := engo.Files.Load(gameSheet, uiFont)
 	if err != nil {
 		panic(err)
 	}
@@ -32,45 +43,62 @@ func (MenuScene) Setup(u engo.Updater) {
 
 	w.AddSystem(&common.RenderSystem{})
 
+	mainFnt := &common.Font{
+		URL:  uiFont,
+		FG:   color.RGBA{R: 153, G: 122, B: 0, A: 255},
+		Size: 30,
+	}
+
 	fnt := &common.Font{
 		URL:  uiFont,
 		FG:   color.White,
-		Size: 64,
+		Size: 25,
 	}
 
 	err := fnt.CreatePreloaded()
-	if err != nil {
-		panic(err)
-	}
+	handleErr(err)
+	err = mainFnt.CreatePreloaded()
+	handleErr(err)
 
-	w.AddSystem(&common.FPSSystem{Display: true, Font: fnt})
+	mainTexture := loadedSprite(mainBtnImage)
+	mainTextureClicked := loadedSprite(mainBtnImageClicked)
+	panelTexture := loadedSprite(greyPanelImage)
 
-	texture, err := common.LoadedSprite(btnImage)
-	if err != nil {
-		log.Println(err)
-	}
+	texture := loadedSprite(btnImage)
+	textureClicked := loadedSprite(btnImageClicked)
 
-	textureClicked, err := common.LoadedSprite(btnImageClicked)
-	if err != nil {
-		log.Println(err)
-	}
-
-	x := (engo.GameWidth() / 2) - texture.Width()/2
-	y := (engo.GameHeight() / 2) - (texture.Height() / 2) - texture.Height()/2
-
-	fmt.Println(texture.Width())
+	x := (engo.GameWidth() / 2) - btnWidth/2
+	y := (engo.GameHeight() / 2) - (btnHeight / 2) - btnHeight/2
 
 	playBtn, err := gui.NewButton(gui.Button{
-		Text:         "Play",
+		Text:         "Start Game",
+		World:        w,
+		Image:        mainTexture,
+		ImageClicked: mainTextureClicked,
+		Font:         mainFnt,
+		Position:     engo.Point{X: x, Y: y - btnMargin - btnHeight - 10},
+		Width:        btnWidth,
+		Height:       btnHeight + 10,
+	})
+
+	playBtn.OnClick(func() {
+		engo.SetScene(GameScene{}, true)
+	})
+
+	optionsBtn, err := gui.NewButton(gui.Button{
+		Text:         "Options",
 		World:        w,
 		Image:        texture,
 		ImageClicked: textureClicked,
 		Font:         fnt,
 		Position:     engo.Point{X: x, Y: y},
+		Width:        btnWidth,
+		Height:       btnHeight,
+		OffsetY:      offsetY,
 	})
 
-	playBtn.OnClick(func() {
-		engo.SetScene(GameScene{}, true)
+	optionsBtn.OnClick(func() {
+		log.Println("options button")
 	})
 
 	exitBtn, err := gui.NewButton(gui.Button{
@@ -79,17 +107,29 @@ func (MenuScene) Setup(u engo.Updater) {
 		Image:        texture,
 		ImageClicked: textureClicked,
 		Font:         fnt,
-		Position:     engo.Point{X: x, Y: y + texture.Height() + 30},
+		Position:     engo.Point{X: x, Y: y + btnHeight + btnMargin},
+		Width:        btnWidth,
+		Height:       btnHeight,
+		OffsetY:      offsetY,
+	})
+
+	offsetX := float32((panelWidth - btnWidth) / 2)
+	_, err = gui.NewPanel(gui.Panel{
+		Text:        "Space Shooter",
+		World:       w,
+		HeaderImage: texture,
+		BodyImage:   panelTexture,
+		Font:        fnt,
+		Position:    engo.Point{X: x - offsetX, Y: 30},
+		Width:       panelWidth,
+		Height:      panelHeight,
 	})
 
 	exitBtn.OnClick(func() {
 		engo.Exit()
 	})
 
-	err = gui.SetBackgroundImage(w, "backgrounds/darkPurple.png")
-	if err != nil {
-		log.Println(err)
-	}
+	common.SetBackground(colorYellow)
 }
 
 func (MenuScene) Type() string { return "MenuScene" }

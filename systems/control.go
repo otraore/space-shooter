@@ -62,6 +62,7 @@ func (c *ControlSystem) Update(dt float32) {
 
 	if btn := engo.Input.Button("quit"); btn.JustPressed() {
 		engo.Files.Unload("spritesheets/game.xml")
+		engo.SetCursorVisibility(true)
 		engo.SetScene(c.MenuScene, false)
 	}
 }

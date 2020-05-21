@@ -1,13 +1,16 @@
 package main
 
-import "github.com/EngoEngine/engo"
+import (
+	"github.com/EngoEngine/engo"
+)
 
 func main() {
 	opts := engo.RunOptions{
 		Title:          "Space Shooter",
-		Width:          1024,
-		Height:         640,
+		Width:          900,
+		Height:         550,
 		StandardInputs: true,
+		NotResizable:   true,
 	}
 
 	engo.Run(opts, &MenuScene{})

@@ -14,21 +14,22 @@ type Graphic struct {
 	ecs.BasicEntity
 	common.RenderComponent
 	common.SpaceComponent
-	common.MouseComponent
 }
 
 type Button struct {
 	Base
-	Label        *Label
-	Graphic      Graphic
-	Image        *common.Texture
-	ImageClicked *common.Texture
-	Position     engo.Point
-	World        *ecs.World
-	Enabled      bool
-	Text         string
-	Font         *common.Font
-	OnMouseOut   func(*Button)
+	Label            *Label
+	Graphic          Graphic
+	Image            *common.Texture
+	ImageClicked     *common.Texture
+	Position         engo.Point
+	World            *ecs.World
+	Enabled          bool
+	Text             string
+	Font             *common.Font
+	OnMouseOut       func(*Button)
+	Width, Height    float32
+	OffsetX, OffsetY float32 // Text offset
 }
 
 func (b *Button) OnClick(f func()) {
@@ -44,20 +45,24 @@ func NewButton(b Button) (*Button, error) {
 
 	b.Graphic.BasicEntity = ecs.NewBasic()
 
-	b.Graphic.MouseComponent = common.MouseComponent{}
+	if b.Width == 0 {
+		b.Width = b.Image.Width()
+	}
+
+	if b.Height == 0 {
+		b.Height = b.Image.Height()
+	}
 
 	b.Graphic.RenderComponent = common.RenderComponent{
 		Drawable: b.Image,
-		Scale:    engo.Point{X: 1, Y: 1}, //Todo: make this editable
+		Scale:    engo.Point{X: b.Width / b.Image.Width(), Y: b.Height / b.Image.Height()},
 	}
 
 	b.Graphic.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{X: b.Position.X, Y: b.Position.Y},
-		Width:    b.Image.Width(),
-		Height:   b.Image.Height(),
+		Position: b.Position,
+		Width:    b.Width,
+		Height:   b.Height,
 	}
-
-	b.Graphic.SpaceComponent.Position = b.Position
 
 	// Make sure only one instance of the systems are added
 	if !btnSystemsAdded {
@@ -81,8 +86,8 @@ func NewButton(b Button) (*Button, error) {
 		Font:  b.Font,
 		Text:  b.Text,
 		Position: engo.Point{
-			X: b.Graphic.SpaceComponent.Position.X + float32(((b.Graphic.SpaceComponent.Width - float32(width)) / 2)),
-			Y: b.Graphic.SpaceComponent.Position.Y + float32(height/2),
+			X: b.Graphic.SpaceComponent.Position.X + float32(((b.Graphic.SpaceComponent.Width - float32(width)) / 2)) + b.OffsetX,
+			Y: b.Graphic.SpaceComponent.Position.Y + float32(height/2) + b.OffsetY,
 		},
 	})
 	return &b, nil
@@ -135,9 +140,11 @@ func (c *ButtonSystem) Update(float32) {
 		}
 	}
 
-	if btnHovered {
-		engo.SetCursor(engo.CursorHand)
-	} else {
-		engo.SetCursor(engo.CursorNone)
+	if SystemCursorEnabled {
+		if btnHovered {
+			engo.SetCursor(engo.CursorHand)
+		} else {
+			engo.SetCursor(engo.CursorNone)
+		}
 	}
 }
