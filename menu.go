@@ -15,12 +15,13 @@ const (
 	mainBtnImageClicked = "buttons/yellow_pressed.png"
 	btnImage            = "buttons/blue.png"
 	btnImageClicked     = "buttons/blue_pressed.png"
-	greyPanelImage      = "ui/grey_panel.png"
+	greyPanelImage      = "ui/grey_panel_hd.png"
+	panelHeaderImage    = "ui/blue_panel_header.png"
 	uiFont              = "fonts/kenvector_future_thin.ttf"
 	gameSheet           = "spritesheets/game.xml"
 	btnWidth            = 340
 	btnHeight           = 70
-	panelWidth          = 450
+	panelWidth          = 420
 	panelHeight         = 400
 	offsetY             = 5
 	btnMargin           = 20
@@ -63,12 +64,13 @@ func (MenuScene) Setup(u engo.Updater) {
 	mainTexture := loadedSprite(mainBtnImage)
 	mainTextureClicked := loadedSprite(mainBtnImageClicked)
 	panelTexture := loadedSprite(greyPanelImage)
+	panelHeaderTexture := loadedSprite(panelHeaderImage)
 
 	texture := loadedSprite(btnImage)
 	textureClicked := loadedSprite(btnImageClicked)
 
 	x := (engo.GameWidth() / 2) - btnWidth/2
-	y := (engo.GameHeight() / 2) - (btnHeight / 2) - btnHeight/2
+	y := ((engo.GameHeight() / 2) - (btnHeight / 2) - btnHeight/2) + 30
 
 	playBtn, err := gui.NewButton(gui.Button{
 		Text:         "Start Game",
@@ -115,14 +117,15 @@ func (MenuScene) Setup(u engo.Updater) {
 
 	offsetX := float32((panelWidth - btnWidth) / 2)
 	_, err = gui.NewPanel(gui.Panel{
-		Text:        "Space Shooter",
-		World:       w,
-		HeaderImage: texture,
-		BodyImage:   panelTexture,
-		Font:        fnt,
-		Position:    engo.Point{X: x - offsetX, Y: 30},
-		Width:       panelWidth,
-		Height:      panelHeight,
+		Text:         "Space Shooter",
+		World:        w,
+		HeaderImage:  panelHeaderTexture,
+		BodyImage:    panelTexture,
+		Font:         fnt,
+		Position:     engo.Point{X: x - offsetX, Y: 50},
+		Width:        panelWidth,
+		Height:       panelHeight,
+		HeaderHeight: 73,
 	})
 
 	exitBtn.OnClick(func() {

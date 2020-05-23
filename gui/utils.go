@@ -29,7 +29,7 @@ func SetBackgroundImage(w *ecs.World, imageUrl string) error {
 	}
 
 	bg.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{X: 1, Y: 1},
+		Position: engo.Point{X: 0, Y: 0},
 		Width:    texture.Width(),
 		Height:   texture.Height(),
 	}

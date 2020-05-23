@@ -104,7 +104,6 @@ func (GameScene) Setup(u engo.Updater) {
 	}
 	lifeImg.Init()
 
-	// Add it to appropriate systems
 	for _, system := range w.Systems() {
 		switch sys := system.(type) {
 		case *common.RenderSystem:
@@ -121,7 +120,7 @@ func (GameScene) Setup(u engo.Updater) {
 	err = gui.SetBackgroundImage(w, "backgrounds/blue.png")
 	handleErr(err)
 
-	engo.Mailbox.Dispatch(systems.SpawnRocks{})
+	// engo.Mailbox.Dispatch(systems.SpawnRocks{})
 	log.Println("Start game, lives remaining: ", ship.LivesLeft)
 }
 
