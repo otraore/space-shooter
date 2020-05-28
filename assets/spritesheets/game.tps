@@ -74,7 +74,7 @@
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
-        <uint>1</uint>
+        <uint>0</uint>
         <key>webpQualityLevel</key>
         <uint>101</uint>
         <key>textureSubPath</key>
@@ -82,7 +82,7 @@
         <key>atfFormats</key>
         <string></string>
         <key>textureFormat</key>
-        <enum type="SettingsBase::TextureFormat">png8</enum>
+        <enum type="SettingsBase::TextureFormat">png</enum>
         <key>borderPadding</key>
         <uint>0</uint>
         <key>maxTextureSize</key>
@@ -102,7 +102,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -149,7 +149,7 @@
             <string></string>
         </struct>
         <key>autoAliasEnabled</key>
-        <true/>
+        <false/>
         <key>trimSpriteNames</key>
         <false/>
         <key>prependSmartFolderName</key>
@@ -163,13 +163,13 @@
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
             <key>extrude</key>
-            <uint>1</uint>
+            <uint>0</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">Trim</enum>
+            <enum type="SpriteSettings::TrimMode">None</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -221,6 +221,7 @@
             </struct>
             <key type="filename">../images/buttons/blue_pressed.png</key>
             <key type="filename">../images/buttons/yellow_pressed.png</key>
+            <key type="filename">../images/ui/blue_panel_header.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -232,6 +233,208 @@
                 <rect>48,11,95,23</rect>
                 <key>scale9Paddings</key>
                 <rect>48,11,95,23</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue01.png</key>
+            <key type="filename">../images/lasers/laserGreen11.png</key>
+            <key type="filename">../images/lasers/laserRed01.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,14,5,27</rect>
+                <key>scale9Paddings</key>
+                <rect>2,14,5,27</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue02.png</key>
+            <key type="filename">../images/lasers/laserBlue04.png</key>
+            <key type="filename">../images/lasers/laserBlue06.png</key>
+            <key type="filename">../images/lasers/laserGreen04.png</key>
+            <key type="filename">../images/lasers/laserGreen08.png</key>
+            <key type="filename">../images/lasers/laserGreen12.png</key>
+            <key type="filename">../images/lasers/laserRed02.png</key>
+            <key type="filename">../images/lasers/laserRed04.png</key>
+            <key type="filename">../images/lasers/laserRed06.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,9,7,19</rect>
+                <key>scale9Paddings</key>
+                <rect>3,9,7,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue03.png</key>
+            <key type="filename">../images/lasers/laserBlue05.png</key>
+            <key type="filename">../images/lasers/laserBlue07.png</key>
+            <key type="filename">../images/lasers/laserGreen05.png</key>
+            <key type="filename">../images/lasers/laserGreen09.png</key>
+            <key type="filename">../images/lasers/laserGreen13.png</key>
+            <key type="filename">../images/lasers/laserRed03.png</key>
+            <key type="filename">../images/lasers/laserRed05.png</key>
+            <key type="filename">../images/lasers/laserRed07.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,9,5,19</rect>
+                <key>scale9Paddings</key>
+                <rect>2,9,5,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue08.png</key>
+            <key type="filename">../images/lasers/laserBlue09.png</key>
+            <key type="filename">../images/lasers/laserGreen14.png</key>
+            <key type="filename">../images/lasers/laserGreen15.png</key>
+            <key type="filename">../images/lasers/laserRed08.png</key>
+            <key type="filename">../images/lasers/laserRed09.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,23</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,23</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue10.png</key>
+            <key type="filename">../images/lasers/laserGreen16.png</key>
+            <key type="filename">../images/lasers/laserRed11.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,9,19,19</rect>
+                <key>scale9Paddings</key>
+                <rect>9,9,19,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue11.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,9,19,19</rect>
+                <key>scale9Paddings</key>
+                <rect>10,9,19,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue12.png</key>
+            <key type="filename">../images/lasers/laserBlue14.png</key>
+            <key type="filename">../images/lasers/laserGreen02.png</key>
+            <key type="filename">../images/lasers/laserGreen06.png</key>
+            <key type="filename">../images/lasers/laserRed12.png</key>
+            <key type="filename">../images/lasers/laserRed14.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,14,7,29</rect>
+                <key>scale9Paddings</key>
+                <rect>3,14,7,29</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue13.png</key>
+            <key type="filename">../images/lasers/laserBlue15.png</key>
+            <key type="filename">../images/lasers/laserGreen03.png</key>
+            <key type="filename">../images/lasers/laserGreen07.png</key>
+            <key type="filename">../images/lasers/laserRed13.png</key>
+            <key type="filename">../images/lasers/laserRed15.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>2,14,5,29</rect>
+                <key>scale9Paddings</key>
+                <rect>2,14,5,29</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserBlue16.png</key>
+            <key type="filename">../images/lasers/laserGreen10.png</key>
+            <key type="filename">../images/lasers/laserRed16.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,14,7,27</rect>
+                <key>scale9Paddings</key>
+                <rect>3,14,7,27</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserGreen01.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,10,19,19</rect>
+                <key>scale9Paddings</key>
+                <rect>9,10,19,19</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../images/lasers/laserRed10.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>9,9,19,18</rect>
+                <key>scale9Paddings</key>
+                <rect>9,9,19,18</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -505,6 +708,7 @@
                 <false/>
             </struct>
             <key type="filename">../images/ui/grey_panel.png</key>
+            <key type="filename">../images/ui/grey_panel_hd.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -528,6 +732,7 @@
             <filename>../images/lives</filename>
             <filename>../images/buttons</filename>
             <filename>../images/ui</filename>
+            <filename>../images/lasers</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

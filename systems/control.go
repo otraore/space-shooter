@@ -37,7 +37,10 @@ func (c *ControlSystem) Remove(basic ecs.BasicEntity) {
 
 func (c *ControlSystem) Update(dt float32) {
 	speed := 500 * dt
-	// Out of bond
+	hori := engo.Input.Axis(engo.DefaultHorizontalAxis).Value()
+	vert := engo.Input.Axis(engo.DefaultVerticalAxis).Value()
+
+	// Out of bounds
 	if c.Ship.SpaceComponent.Position.Y+c.Ship.SpaceComponent.Height > engo.GameHeight() {
 		if engo.Input.Axis(engo.DefaultVerticalAxis).Value() > 0 {
 			return
@@ -53,11 +56,16 @@ func (c *ControlSystem) Update(dt float32) {
 	engo.Mailbox.Dispatch(gui.UpdateMsg{})
 
 	for _, e := range c.entities {
-		hori := engo.Input.Axis(engo.DefaultHorizontalAxis)
-		e.SpaceComponent.Position.X += speed * hori.Value()
+		posX := e.SpaceComponent.Position.X + (speed * hori)
+		posY := e.SpaceComponent.Position.Y + (speed * vert)
 
-		vert := engo.Input.Axis(engo.DefaultVerticalAxis)
-		e.SpaceComponent.Position.Y += speed * vert.Value()
+		if posX > 0 && posX < engo.GameWidth() {
+			e.SpaceComponent.Position.X = posX
+		}
+
+		if posY > 0 && posY < engo.GameHeight() {
+			e.SpaceComponent.Position.Y = posY
+		}
 	}
 
 	if btn := engo.Input.Button("quit"); btn.JustPressed() {

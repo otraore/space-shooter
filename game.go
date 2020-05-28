@@ -8,6 +8,7 @@ import (
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
+	"github.com/otraore/space-shooter/config"
 	"github.com/otraore/space-shooter/gui"
 	"github.com/otraore/space-shooter/systems"
 )
@@ -50,23 +51,27 @@ func (GameScene) Setup(u engo.Updater) {
 		Type:        "1",
 		Font:        fnt,
 	}
+	rockSys := &systems.RockSpawnSystem{SpawnRocks: true}
+	projSys := &systems.ProjectileSystem{Ship: &ship, Color: "green"}
 	// Add all of the systems
 	w.AddSystem(&common.RenderSystem{})
 	w.AddSystem(&common.CollisionSystem{})
-	w.AddSystem(&systems.DeathSystem{Ship: &ship})
-	w.AddSystem(&systems.FallingSystem{})
-	w.AddSystem(&systems.ControlSystem{Ship: &ship, MenuScene: &MenuScene{}})
-	w.AddSystem(&systems.RockSpawnSystem{SpawnRocks: false})
+	w.AddSystem(projSys)
+	w.AddSystem(rockSys)
+	w.AddSystem(&systems.CollisionSystem{Ship: &ship.BasicEntity, ProjectileMaster: &projSys.Master, RockSys: rockSys, ProjSys: projSys})
 	w.AddSystem(&systems.ShipSystem{Ship: &ship})
+	w.AddSystem(&systems.ControlSystem{Ship: &ship, MenuScene: &MenuScene{}})
 
 	engo.Input.RegisterButton("quit", engo.KeyQ, engo.KeyEscape)
+	engo.Input.RegisterButton("fire", engo.KeySpace)
 
 	texture, err := common.LoadedSprite(ship.AssetURL())
 	handleErr(err)
 
 	ship.RenderComponent = common.RenderComponent{
-		Drawable: texture,
-		Scale:    engo.Point{X: 1, Y: 1},
+		Drawable:    texture,
+		Scale:       config.GlobalScale,
+		StartZIndex: 999999,
 	}
 
 	width := texture.Width() * ship.RenderComponent.Scale.X
@@ -77,8 +82,7 @@ func (GameScene) Setup(u engo.Updater) {
 		Height:   height,
 	}
 	ship.CollisionComponent = common.CollisionComponent{
-		Main:  1,
-		Group: 1,
+		Main: 1,
 	}
 
 	score := gui.NewLabel(gui.Label{
@@ -120,8 +124,8 @@ func (GameScene) Setup(u engo.Updater) {
 	err = gui.SetBackgroundImage(w, "backgrounds/blue.png")
 	handleErr(err)
 
-	// engo.Mailbox.Dispatch(systems.SpawnRocks{})
 	log.Println("Start game, lives remaining: ", ship.LivesLeft)
+	// Laser style 1 & 2
 }
 
 func (GameScene) Type() string { return "Game" }

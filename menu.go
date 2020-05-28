@@ -70,7 +70,7 @@ func (MenuScene) Setup(u engo.Updater) {
 	textureClicked := loadedSprite(btnImageClicked)
 
 	x := (engo.GameWidth() / 2) - btnWidth/2
-	y := ((engo.GameHeight() / 2) - (btnHeight / 2) - btnHeight/2) + 30
+	y := ((engo.GameHeight() / 2) - (btnHeight / 2) - btnHeight/2) + 50
 
 	playBtn, err := gui.NewButton(gui.Button{
 		Text:         "Start Game",

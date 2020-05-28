@@ -2,6 +2,7 @@ package systems
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
@@ -80,4 +81,22 @@ func (s *ShipSystem) Update(dt float32) {
 // AssetURL returns the location of the ship image based on it's type and color
 func (s Ship) AssetURL() string {
 	return "ships/" + s.Color + s.Type + ".png"
+}
+
+// ResetPos puts the ship back to it's starting position
+func (s *Ship) ResetPos() {
+	s.SpaceComponent.Position = engo.Point{X: (engo.GameWidth() / 2) - s.SpaceComponent.Width, Y: engo.GameHeight() - s.SpaceComponent.Height}
+}
+
+func (s *Ship) OnCollision() {
+	engo.Mailbox.Dispatch(ClearRocks{})
+	s.ResetPos()
+
+	go func() {
+		for i := 0; i < 5; i++ {
+			time.Sleep(500 * time.Millisecond)
+			s.RenderComponent.Hidden = !s.RenderComponent.Hidden
+		}
+		s.RenderComponent.Hidden = false
+	}()
 }

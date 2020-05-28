@@ -38,6 +38,7 @@ func NewPanel(p Panel) (*Panel, error) {
 		Drawable: p.BodyImage,
 		Scale:    engo.Point{X: p.Width / p.BodyImage.Width(), Y: (realPanelHeight) / p.BodyImage.Height()},
 	}
+
 	p.Body.SpaceComponent = common.SpaceComponent{
 		Position: engo.Point{X: p.Position.X, Y: p.Position.Y + p.HeaderHeight - 15},
 		Width:    p.Width,
