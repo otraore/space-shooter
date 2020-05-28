@@ -46,7 +46,8 @@ func (GameScene) Setup(u engo.Updater) {
 	// Create the ship object
 	ship = systems.Ship{
 		BasicEntity: ecs.NewBasic(),
-		LivesLeft:   10,
+		LivesLeft:   3,
+		Score:       0,
 		Color:       "orange",
 		Type:        "1",
 		Font:        fnt,
@@ -84,18 +85,6 @@ func (GameScene) Setup(u engo.Updater) {
 	ship.CollisionComponent = common.CollisionComponent{
 		Main: 1,
 	}
-
-	score := gui.NewLabel(gui.Label{
-		World: w,
-		Font:  fnt,
-		Text:  "002600",
-		Position: engo.Point{
-			X: 0,
-			Y: 10,
-		},
-	})
-
-	score.SpaceComponent.Position.X = engo.GameWidth() - score.SpaceComponent.Width
 
 	texture, err = common.LoadedSprite("lives/red3.png")
 	handleErr(err)

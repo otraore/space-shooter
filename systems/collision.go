@@ -4,6 +4,7 @@ import (
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
+	"github.com/otraore/space-shooter/config"
 )
 
 type CollisionSystem struct {
@@ -34,6 +35,7 @@ func (c *CollisionSystem) New(*ecs.World) {
 			// projectile has hit a rock
 			c.RockSys.Remove(*msg.To.BasicEntity)
 			c.ProjSys.Remove(*msg.Entity.BasicEntity)
+			engo.Mailbox.Dispatch(config.ScoreChanged{})
 		}
 	})
 }

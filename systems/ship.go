@@ -1,17 +1,19 @@
 package systems
 
 import (
+	"log"
 	"strconv"
 	"time"
 
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
+	"github.com/otraore/space-shooter/config"
 	"github.com/otraore/space-shooter/gui"
 )
 
 type Ship struct {
-	LivesLeft int
+	LivesLeft, Score int
 	// Color of the ship (red, blue, orange)
 	Color string
 	// Type of the ship (1, 2, 3)
@@ -34,6 +36,7 @@ type ShipSystem struct {
 	entities   []shipEntity
 	Ship       *Ship
 	LivesLabel *gui.Label
+	ScoreLabel *gui.Label
 }
 
 func (s *ShipSystem) New(w *ecs.World) {
@@ -50,9 +53,29 @@ func (s *ShipSystem) New(w *ecs.World) {
 		},
 	})
 
+	s.ScoreLabel = gui.NewLabel(gui.Label{
+		World: w,
+		Font:  s.Ship.Font,
+		Text:  "0",
+		Position: engo.Point{
+			X: 0,
+			Y: 10,
+		},
+	})
+
+	s.ScoreLabel.SpaceComponent.Position.X = engo.GameWidth() - s.ScoreLabel.SpaceComponent.Width - 7.5
+
 	engo.Mailbox.Listen(ClearRocks{}.Type(), func(_ engo.Message) {
 		s.Ship.LivesLeft--
 		s.LivesLabel.SetText("X " + strconv.Itoa(s.Ship.LivesLeft))
+	})
+
+	engo.Mailbox.Listen(config.ScoreChanged{}.Type(), func(_ engo.Message) {
+		log.Println("Score Changed")
+		s.Ship.Score += 20
+		s.ScoreLabel.SetText(strconv.Itoa(s.Ship.Score))
+		log.Println("Space component width ", s.ScoreLabel.SpaceComponent.Width)
+		s.ScoreLabel.SpaceComponent.Position.X = engo.GameWidth() - s.ScoreLabel.SpaceComponent.Width - 7.5
 	})
 }
 

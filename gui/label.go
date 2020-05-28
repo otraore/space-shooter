@@ -52,15 +52,22 @@ func (l *Label) SetText(s string) error {
 	if l.Font == nil {
 		return errors.New("Label.SetText called without setting Label.Font")
 	}
-
 	if l.cache == s {
 		return nil
 	}
 
-	l.RenderComponent.Drawable.Close()
+	l.Text = s
+	l.cache = s
+
 	l.RenderComponent.Drawable = common.Text{
 		Font: l.Font,
 		Text: s,
 	}
+
+	width, height, _ := l.Font.TextDimensions(l.Text)
+
+	l.SpaceComponent.Width = float32(width)
+	l.SpaceComponent.Height = float32(height)
+
 	return nil
 }
