@@ -73,7 +73,7 @@ func (p *ProjectileSystem) Update(dt float32) {
 		p.Fire(engo.Point{X: posX, Y: p.Ship.SpaceComponent.Position.Y})
 	}
 
-	speed := 500 * dt
+	const speed = 12
 
 	for _, e := range p.entities {
 		e.SpaceComponent.Position.Y -= speed

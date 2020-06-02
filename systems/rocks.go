@@ -97,7 +97,7 @@ func (r *RockSpawnSystem) Update(dt float32) {
 
 	// Falling logic
 	for _, e := range r.entities {
-		e.SpaceComponent.Position.Y += config.SpeedY * dt
+		e.SpaceComponent.Position.Y += 5.5
 
 		if e.SpaceComponent.Position.Y > engo.GameHeight() {
 			r.Remove(*e.BasicEntity)
