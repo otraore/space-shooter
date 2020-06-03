@@ -1,7 +1,6 @@
 package systems
 
 import (
-	"log"
 	"strconv"
 	"time"
 
@@ -19,11 +18,13 @@ type Ship struct {
 	// Type of the ship (1, 2, 3)
 	Type string
 	// Font is the font used to display the lives and score for the ship
-	Font *common.Font
+	Font        *common.Font
+	LaserPlayer *common.Player
 	ecs.BasicEntity
 	common.CollisionComponent
 	common.RenderComponent
 	common.SpaceComponent
+	common.AudioComponent
 }
 
 type shipEntity struct {
@@ -42,6 +43,10 @@ type ShipSystem struct {
 func (s *ShipSystem) New(w *ecs.World) {
 	s.Ship.SpaceComponent.Position.Y = engo.GameHeight() - s.Ship.SpaceComponent.Height
 	s.Ship.SpaceComponent.Position.X = (engo.GameWidth() / 2) - s.Ship.SpaceComponent.Width
+
+	s.Ship.CollisionComponent = common.CollisionComponent{
+		Main: 1,
+	}
 
 	s.LivesLabel = gui.NewLabel(gui.Label{
 		World: w,
@@ -64,17 +69,14 @@ func (s *ShipSystem) New(w *ecs.World) {
 	})
 
 	s.ScoreLabel.SpaceComponent.Position.X = engo.GameWidth() - s.ScoreLabel.SpaceComponent.Width - 7.5
-
 	engo.Mailbox.Listen(ClearRocks{}.Type(), func(_ engo.Message) {
 		s.Ship.LivesLeft--
 		s.LivesLabel.SetText("X " + strconv.Itoa(s.Ship.LivesLeft))
 	})
 
 	engo.Mailbox.Listen(config.ScoreChanged{}.Type(), func(_ engo.Message) {
-		log.Println("Score Changed")
 		s.Ship.Score += 20
 		s.ScoreLabel.SetText(strconv.Itoa(s.Ship.Score))
-		log.Println("Space component width ", s.ScoreLabel.SpaceComponent.Width)
 		s.ScoreLabel.SpaceComponent.Position.X = engo.GameWidth() - s.ScoreLabel.SpaceComponent.Width - 7.5
 	})
 }

@@ -58,7 +58,6 @@ func (rock *RockSpawnSystem) New(w *ecs.World) {
 			time.Sleep(5 * time.Second)
 			engo.Mailbox.Dispatch(SpawnRocks{})
 		}()
-		log.Println("ClearRocks")
 	})
 }
 

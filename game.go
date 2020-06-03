@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 
@@ -22,12 +21,10 @@ var (
 type GameScene struct{}
 
 func (GameScene) Preload() {
-	err := engo.Files.Load("spritesheets/game.xml")
+	err := engo.Files.Load("spritesheets/game.xml", "sounds/sfx_laser.mp3")
 	if err != nil {
 		log.Println(err)
 	}
-
-	fmt.Println("Game Scene Preload")
 }
 
 func (GameScene) Setup(u engo.Updater) {
@@ -57,6 +54,7 @@ func (GameScene) Setup(u engo.Updater) {
 	// Add all of the systems
 	w.AddSystem(&common.RenderSystem{})
 	w.AddSystem(&common.CollisionSystem{})
+	w.AddSystem(&common.AudioSystem{})
 	w.AddSystem(projSys)
 	w.AddSystem(rockSys)
 	w.AddSystem(&systems.CollisionSystem{Ship: &ship.BasicEntity, ProjectileMaster: &projSys.Master, RockSys: rockSys, ProjSys: projSys})
@@ -82,9 +80,13 @@ func (GameScene) Setup(u engo.Updater) {
 		Width:    width,
 		Height:   height,
 	}
-	ship.CollisionComponent = common.CollisionComponent{
-		Main: 1,
+
+	player, err := common.LoadedPlayer("sounds/sfx_laser.mp3")
+	if err != nil {
+		handleErr(err)
 	}
+	ship.LaserPlayer = player
+	ship.AudioComponent = common.AudioComponent{Player: player}
 
 	texture, err = common.LoadedSprite("lives/red3.png")
 	handleErr(err)
@@ -103,6 +105,8 @@ func (GameScene) Setup(u engo.Updater) {
 			sys.Add(&ship.BasicEntity, &ship.RenderComponent, &ship.SpaceComponent)
 		case *common.CollisionSystem:
 			sys.Add(&ship.BasicEntity, &ship.CollisionComponent, &ship.SpaceComponent)
+		case *common.AudioSystem:
+			sys.Add(&ship.BasicEntity, &ship.AudioComponent)
 		case *systems.ControlSystem:
 			sys.Add(&ship.BasicEntity, &ship.SpaceComponent)
 		case *systems.ShipSystem:

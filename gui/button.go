@@ -1,8 +1,6 @@
 package gui
 
 import (
-	"fmt"
-
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
@@ -101,9 +99,7 @@ type ButtonSystem struct {
 	entities []buttonEntity
 }
 
-func (c *ButtonSystem) New(w *ecs.World) {
-	fmt.Println("Button Created")
-}
+func (c *ButtonSystem) New(w *ecs.World) {}
 
 func (c *ButtonSystem) Add(b *Button) {
 	c.entities = append(c.entities, buttonEntity{b})

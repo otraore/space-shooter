@@ -24,6 +24,6 @@ func loadedSprite(url string) *common.Texture {
 
 func handleErr(err error) {
 	if err != nil {
-		log.Println("error: ", err)
+		log.Fatal("error: ", err)
 	}
 }

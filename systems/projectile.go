@@ -110,4 +110,7 @@ func (p *ProjectileSystem) Fire(pos engo.Point) {
 	}
 
 	p.Add(&projectile.BasicEntity, &projectile.SpaceComponent)
+
+	p.Ship.LaserPlayer.Rewind()
+	p.Ship.LaserPlayer.Play()
 }
