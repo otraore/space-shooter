@@ -28,7 +28,6 @@ func (GameScene) Preload() {
 }
 
 func (GameScene) Setup(u engo.Updater) {
-	engo.SetCursorVisibility(false)
 	w, _ := u.(*ecs.World)
 
 	fnt := &common.Font{
@@ -46,7 +45,7 @@ func (GameScene) Setup(u engo.Updater) {
 		LivesLeft:   3,
 		Score:       0,
 		Color:       "orange",
-		Type:        "1",
+		Type:        "2",
 		Font:        fnt,
 	}
 	rockSys := &systems.RockSpawnSystem{SpawnRocks: true}
@@ -88,7 +87,7 @@ func (GameScene) Setup(u engo.Updater) {
 	ship.LaserPlayer = player
 	ship.AudioComponent = common.AudioComponent{Player: player}
 
-	texture, err = common.LoadedSprite("lives/red3.png")
+	texture, err = common.LoadedSprite("lives/" + ship.Color + ship.Type + ".png")
 	handleErr(err)
 
 	lifeImg := gui.Image{
