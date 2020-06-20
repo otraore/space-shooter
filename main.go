@@ -7,8 +7,8 @@ import (
 func main() {
 	opts := engo.RunOptions{
 		Title:          "Space Shooter",
-		Width:          256 * 2,
-		Height:         256 * 2,
+		Width:          512,
+		Height:         512,
 		StandardInputs: true,
 		NotResizable:   true,
 	}
