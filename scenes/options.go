@@ -71,7 +71,6 @@ func (OptionsScene) Setup(u engo.Updater) {
 		Position:     engo.Point{X: x + optionsBtnWidth + 20, Y: y},
 		Width:        optionsBtnWidth,
 		Height:       btnHeight,
-		OffsetY:      offsetY,
 	})
 
 	saveBtn.OnClick(func() {
