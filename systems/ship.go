@@ -13,10 +13,8 @@ import (
 
 type Ship struct {
 	LivesLeft, Score int
-	// Color of the ship (red, blue, orange)
-	Color string
-	// Type of the ship (1, 2, 3)
-	Type string
+	// Config are the settings that change the look and functionality of the ship
+	Config config.ShipConfig
 	// Font is the font used to display the lives and score for the ship
 	Font        *common.Font
 	LaserPlayer *common.Player
@@ -105,7 +103,7 @@ func (s *ShipSystem) Update(dt float32) {
 
 // AssetURL returns the location of the ship image based on it's type and color
 func (s Ship) AssetURL() string {
-	return "ships/" + s.Color + s.Type + ".png"
+	return "ships/" + s.Config.Color.String() + s.Config.Type + ".png"
 }
 
 // ResetPos puts the ship back to it's starting position

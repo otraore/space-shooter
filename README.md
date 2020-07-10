@@ -4,7 +4,7 @@ A space shooter game made with [golang](https://golang.org) and [engo](https://g
 
 # web
 
-run `make html` if you want to compile and run for web using wasm
+run `make web` if you want to compile and run for web using wasm
 
 # preview 
 As of 5/28/2020

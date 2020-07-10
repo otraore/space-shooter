@@ -6,8 +6,6 @@ import (
 	"github.com/EngoEngine/engo/common"
 )
 
-var btnSystemsAdded = false
-
 type Graphic struct {
 	ecs.BasicEntity
 	common.RenderComponent
@@ -62,12 +60,6 @@ func NewButton(b Button) (*Button, error) {
 		Height:   b.Height,
 	}
 
-	// Make sure only one instance of the systems are added
-	if !btnSystemsAdded {
-		b.World.AddSystem(&ButtonSystem{})
-		btnSystemsAdded = true
-	}
-
 	for _, system := range b.World.Systems() {
 		switch sys := system.(type) {
 		case *common.RenderSystem:
@@ -118,7 +110,7 @@ func (c *ButtonSystem) Remove(basic ecs.BasicEntity) {
 	}
 }
 
-func (c *ButtonSystem) Update(float32) {
+func (c *ButtonSystem) Update(dt float32) {
 	btnHovered := false
 	curPos := engo.Point{X: engo.Input.Mouse.X, Y: engo.Input.Mouse.Y}
 	for _, e := range c.entities {

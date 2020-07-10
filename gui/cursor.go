@@ -23,14 +23,14 @@ func SetCursorImage(w *ecs.World, imageUrl string) error {
 	}
 
 	cursor.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{0, 0},
+		Position: engo.Point{X: 0, Y: 0},
 		Width:    texture.Width() * cursor.RenderComponent.Scale.X,
 		Height:   texture.Height() * cursor.RenderComponent.Scale.Y,
 	}
 
 	cursor.RenderComponent = common.RenderComponent{
 		Drawable:    texture,
-		Scale:       engo.Point{1, 1},
+		Scale:       engo.Point{X: 1, Y: 1},
 		StartZIndex: 99999,
 	}
 
