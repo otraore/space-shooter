@@ -111,6 +111,9 @@ func (p *ProjectileSystem) Fire(pos engo.Point) {
 
 	p.Add(&projectile.BasicEntity, &projectile.SpaceComponent)
 
-	p.Ship.LaserPlayer.Rewind()
+	err := p.Ship.LaserPlayer.Rewind()
+	if err != nil {
+		log.Fatal("failed to rewind: ", err)
+	}
 	p.Ship.LaserPlayer.Play()
 }
