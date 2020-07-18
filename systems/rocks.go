@@ -1,6 +1,7 @@
 package systems
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -11,10 +12,14 @@ import (
 	"github.com/otraore/space-shooter/config"
 )
 
+func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
+
 type RockSpawnSystem struct {
 	entities   []rockEntity
 	world      *ecs.World
-	texture    *common.Texture
+	textures   map[string]*common.Texture
 	SpawnRocks bool
 }
 
@@ -30,27 +35,39 @@ type rockEntity struct {
 	*common.SpaceComponent
 }
 
-func (rock *RockSpawnSystem) New(w *ecs.World) {
-	rock.world = w
+func (rs *RockSpawnSystem) New(w *ecs.World) {
+	rs.world = w
+	rs.textures = make(map[string]*common.Texture)
 
-	texture, err := common.LoadedSprite("rocks/meteorBrown_big1.png")
-	if err != nil {
-		log.Println(err)
+	for _, color := range config.RockColors {
+		for _, size := range config.RockSizes {
+			count := 2
+			if size == config.RockSizeBig {
+				count = 4
+			}
+
+			for i := 1; i <= count; i++ {
+				url := rs.rockURL(size, color, config.RockType(i))
+				texture, err := common.LoadedSprite(url)
+				if err != nil {
+					log.Println(err)
+				}
+				rs.textures[url] = texture
+			}
+		}
 	}
 
-	rock.texture = texture
-
 	engo.Mailbox.Listen(ClearRocks{}.Type(), func(_ engo.Message) {
-		rock.SpawnRocks = false
+		rs.SpawnRocks = false
 	})
 
 	engo.Mailbox.Listen(SpawnRocks{}.Type(), func(_ engo.Message) {
-		rock.SpawnRocks = true
+		rs.SpawnRocks = true
 	})
 
 	engo.Mailbox.Listen(ClearRocks{}.Type(), func(message engo.Message) {
-		for _, e := range rock.entities {
-			rock.Remove(*e.BasicEntity)
+		for _, e := range rs.entities {
+			rs.Remove(*e.BasicEntity)
 			w.RemoveEntity(*e.BasicEntity)
 		}
 
@@ -85,7 +102,7 @@ func (r *RockSpawnSystem) Remove(basic ecs.BasicEntity) {
 func (r *RockSpawnSystem) Update(dt float32) {
 	// Rock span logic
 	if r.SpawnRocks {
-		if rand.Float32() > .96 {
+		if rand.Float32() > .95 {
 			position := engo.Point{
 				X: rand.Float32() * engo.GameWidth(),
 				Y: -32,
@@ -106,14 +123,25 @@ func (r *RockSpawnSystem) Update(dt float32) {
 
 func (rs *RockSpawnSystem) NewRock(position engo.Point) {
 	rock := Rock{BasicEntity: ecs.NewBasic()}
+
+	color := config.RockColors[rand.Intn(len(config.RockColors))]
+	size := config.RockSizes[rand.Intn(len(config.RockSizes))]
+	numTypes := 2
+	if size == config.RockSizeBig {
+		numTypes = 4
+	}
+	rtype := config.RockTypes[rand.Intn(numTypes)]
+
+	textureURL := rs.rockURL(size, color, rtype)
+	texture := rs.textures[textureURL]
 	rock.RenderComponent = common.RenderComponent{
-		Drawable: rs.texture,
+		Drawable: texture,
 		Scale:    config.GlobalScale,
 	}
 	rock.SpaceComponent = common.SpaceComponent{
 		Position: position,
-		Width:    rs.texture.Width() * rock.RenderComponent.Scale.X,
-		Height:   rs.texture.Height() * rock.RenderComponent.Scale.Y,
+		Width:    texture.Width() * rock.RenderComponent.Scale.X,
+		Height:   texture.Height() * rock.RenderComponent.Scale.Y,
 	}
 	rock.CollisionComponent = common.CollisionComponent{Group: 1}
 
@@ -127,6 +155,10 @@ func (rs *RockSpawnSystem) NewRock(position engo.Point) {
 	}
 
 	rs.Add(&rock.BasicEntity, &rock.SpaceComponent)
+}
+
+func (RockSpawnSystem) rockURL(size config.RockSize, color config.RockColor, num config.RockType) string {
+	return fmt.Sprintf("rocks/%s_%s_%d.png", size.String(), color.String(), num)
 }
 
 type ClearRocks struct{}

@@ -70,7 +70,7 @@
             </struct>
         </struct>
         <key>shapePadding</key>
-        <uint>0</uint>
+        <uint>1</uint>
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
@@ -102,7 +102,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -307,8 +307,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_big1.png</key>
-            <key type="filename">../images/rocks/meteorGrey_big1.png</key>
+            <key type="filename">../images/rocks/big_brown_1.png</key>
+            <key type="filename">../images/rocks/big_grey_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -323,8 +323,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_big2.png</key>
-            <key type="filename">../images/rocks/meteorGrey_big2.png</key>
+            <key type="filename">../images/rocks/big_brown_2.png</key>
+            <key type="filename">../images/rocks/big_grey_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -339,8 +339,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_big3.png</key>
-            <key type="filename">../images/rocks/meteorGrey_big3.png</key>
+            <key type="filename">../images/rocks/big_brown_3.png</key>
+            <key type="filename">../images/rocks/big_grey_3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -355,8 +355,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_big4.png</key>
-            <key type="filename">../images/rocks/meteorGrey_big4.png</key>
+            <key type="filename">../images/rocks/big_brown_4.png</key>
+            <key type="filename">../images/rocks/big_grey_4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -371,8 +371,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_med1.png</key>
-            <key type="filename">../images/rocks/meteorGrey_med1.png</key>
+            <key type="filename">../images/rocks/medium_brown_1.png</key>
+            <key type="filename">../images/rocks/medium_grey_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -387,8 +387,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_med3.png</key>
-            <key type="filename">../images/rocks/meteorGrey_med2.png</key>
+            <key type="filename">../images/rocks/medium_brown_2.png</key>
+            <key type="filename">../images/rocks/medium_grey_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -403,8 +403,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_small1.png</key>
-            <key type="filename">../images/rocks/meteorGrey_small1.png</key>
+            <key type="filename">../images/rocks/small_brown_1.png</key>
+            <key type="filename">../images/rocks/small_grey_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -419,8 +419,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_small2.png</key>
-            <key type="filename">../images/rocks/meteorGrey_small2.png</key>
+            <key type="filename">../images/rocks/small_brown_2.png</key>
+            <key type="filename">../images/rocks/small_grey_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -435,8 +435,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_tiny1.png</key>
-            <key type="filename">../images/rocks/meteorGrey_tiny1.png</key>
+            <key type="filename">../images/rocks/tiny_brown_1.png</key>
+            <key type="filename">../images/rocks/tiny_grey_1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -451,8 +451,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../images/rocks/meteorBrown_tiny2.png</key>
-            <key type="filename">../images/rocks/meteorGrey_tiny2.png</key>
+            <key type="filename">../images/rocks/tiny_brown_2.png</key>
+            <key type="filename">../images/rocks/tiny_grey_2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
