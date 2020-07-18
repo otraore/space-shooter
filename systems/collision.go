@@ -4,7 +4,7 @@ import (
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
-	"github.com/otraore/space-shooter/config"
+	"github.com/otraore/space-shooter/scenes/config"
 )
 
 type CollisionSystem struct {

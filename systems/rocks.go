@@ -9,7 +9,7 @@ import (
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
-	"github.com/otraore/space-shooter/config"
+	"github.com/otraore/space-shooter/scenes/config"
 )
 
 func init() {
@@ -107,6 +107,8 @@ func (r *RockSpawnSystem) Update(dt float32) {
 				X: rand.Float32() * engo.GameWidth(),
 				Y: -32,
 			}
+
+			// todo: span big rocks are a higher rate than the small ones
 			r.NewRock(position)
 		}
 	}

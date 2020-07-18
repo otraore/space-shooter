@@ -7,8 +7,8 @@ import (
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
-	"github.com/otraore/space-shooter/config"
 	"github.com/otraore/space-shooter/gui"
+	"github.com/otraore/space-shooter/scenes/config"
 	"github.com/otraore/space-shooter/systems"
 )
 
