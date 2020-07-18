@@ -1,1 +1,2 @@
 *.tps linguist-vendored
+wasm_exec.js linguist-vendored
